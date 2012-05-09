@@ -1,0 +1,1 @@
+NuGet.exe pack -Build -Verbose -Properties Configuration=Release;OutputPath=%TEMP% ..\MonkeyOrm\MonkeyOrm.csproj
