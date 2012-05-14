@@ -73,6 +73,15 @@ namespace MonkeyOrm
             }
         }
 
+        public static int SaveBatch(this Func<IDbConnection> connectionFactory, string table, IEnumerable<object> batch, int chunkSize = 0, IEnumerable<string> whitelist = null, IEnumerable<string> blacklist = null)
+        {
+            using (var connection = connectionFactory())
+            {
+                connection.Open();
+                return connection.SaveBatch(table, batch, chunkSize, whitelist, blacklist);
+            }
+        }
+
         public static int Update(this Func<IDbConnection> connectionFactory, string table, object values, string where, object parameters = null, IEnumerable<string> whitelist = null, IEnumerable<string> blacklist = null)
         {
             using (var connection = connectionFactory())

@@ -24,18 +24,24 @@ namespace MonkeyOrm.Tests
         private const string ConnectionString = "server=localhost;user id=developer;password=etOile03;port=3306;";
         private string connectionString;
 
+        public DbTestBase(bool createTestTable = true)
+        {
+            this.CreateTestTable = createTestTable;
+        }
+
         protected string DatabaseName { get; set; }
+
+        protected bool CreateTestTable { get; set; }
+
 
         [TestFixtureSetUp]
         public void FixtureSetup()
         {
             this.DatabaseName = this.GetType().Name + DateTime.UtcNow.ToString("yyyy_MM_dd__HH_mm_ss");
             using (var connection = new MySqlConnection(ConnectionString))
-            using (var command = connection.CreateCommand())
             {
                 connection.Open();
-                command.CommandText = string.Format("CREATE DATABASE IF NOT EXISTS `{0}`;", this.DatabaseName);
-                command.ExecuteNonQuery();
+                connection.Execute(string.Format("CREATE DATABASE IF NOT EXISTS `{0}`", this.DatabaseName));
             }
 
             var connectionStringBuilder = new MySqlConnectionStringBuilder(ConnectionString) { Database = this.DatabaseName };
@@ -45,7 +51,31 @@ namespace MonkeyOrm.Tests
         [TestFixtureTearDown]
         public void FixtureTearDown()
         {
-            this.ConnectionFactory().Execute(string.Format("DROP DATABASE IF EXISTS `{0}`;", this.DatabaseName));
+            this.ConnectionFactory().Execute(string.Format("DROP DATABASE IF EXISTS `{0}`", this.DatabaseName));
+        }
+
+        [SetUp]
+        public void SetUp()
+        {
+            if (this.CreateTestTable)
+            {
+                this.ConnectionFactory().Execute(
+                   @"CREATE TABLE `Test` (
+                    `Id` INT NOT NULL AUTO_INCREMENT,
+                    `DataInt` INT,
+                    `DataLong` BIGINT,
+                    `DataString` VARCHAR(50) DEFAULT 'A Default Value',
+                    PRIMARY KEY (`Id`)) AUTO_INCREMENT=0 ENGINE=InnoDB");
+            }
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            if (this.CreateTestTable)
+            {
+                this.ConnectionFactory().Execute(@"DROP TABLE IF EXISTS `Test`");
+            }
         }
 
         protected IConnectionFactory ConnectionFactory()

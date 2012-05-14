@@ -20,47 +20,52 @@ namespace MonkeyOrm
     {
         public static int Execute(this IDbTransaction transaction, string nonQuery, object parameters = null)
         {
-            return transaction.Connection.Execute(nonQuery, parameters);
+            return transaction.Connection.Execute(nonQuery, parameters, transaction);
         }
 
         public static List<dynamic> ReadAll(this IDbTransaction transaction, string query, object parameters = null)
         {
-            return transaction.Connection.ReadAll(query, parameters);
+            return transaction.Connection.ReadAll(query, parameters, transaction);
         }
 
         public static dynamic ReadOne(this IDbTransaction transaction, string query, object parameters = null)
         {
-            return transaction.Connection.ReadOne(query, parameters);
+            return transaction.Connection.ReadOne(query, parameters, transaction);
         }
 
         public static int Save(this IDbTransaction transaction, string table, object values, IEnumerable<string> whitelist = null, IEnumerable<string> blacklist = null)
         {
-            return transaction.Connection.Save(table, values, whitelist, blacklist);
+            return transaction.Connection.Save(table, values, whitelist, blacklist, transaction);
         }
 
         public static int Save(this IDbTransaction transaction, string table, object values, out int id, IEnumerable<string> whitelist = null, IEnumerable<string> blacklist = null)
         {
-            return transaction.Connection.Save(table, values, out id, whitelist, blacklist);
+            return transaction.Connection.Save(table, values, out id, whitelist, blacklist, transaction);
         }
 
         public static int Save(this IDbTransaction transaction, string table, object values, out long id, IEnumerable<string> whitelist = null, IEnumerable<string> blacklist = null)
         {
-            return transaction.Connection.Save(table, values, out id, whitelist, blacklist);
+            return transaction.Connection.Save(table, values, out id, whitelist, blacklist, transaction);
+        }
+
+        public static int SaveBatch(this IDbTransaction transaction, string table, IEnumerable<object> batch, int chunkSize = 0, IEnumerable<string> whitelist = null, IEnumerable<string> blacklist = null)
+        {
+            return transaction.Connection.SaveBatch(table, batch, chunkSize, whitelist, blacklist, transaction);
         }
 
         public static int Upsert(this IDbTransaction transaction, string table, object values, IEnumerable<string> whitelist = null, IEnumerable<string> blacklist = null)
         {
-            return transaction.Connection.Upsert(table, values, whitelist, blacklist);
+            return transaction.Connection.Upsert(table, values, whitelist, blacklist, transaction);
         }
 
         public static int Update(this IDbTransaction transaction, string table, object values, string where, object parameters = null, IEnumerable<string> whitelist = null, IEnumerable<string> blacklist = null)
         {
-            return transaction.Connection.Update(table, values, where, parameters, whitelist, blacklist);
+            return transaction.Connection.Update(table, values, where, parameters, whitelist, blacklist, transaction);
         }
 
         public static int Delete(this IDbTransaction transaction, string table, string where, object parameters = null)
         {
-            return transaction.Connection.Delete(table, where, parameters);
+            return transaction.Connection.Delete(table, where, parameters, transaction);
         }
     }
 }

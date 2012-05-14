@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="DbTestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SaveBatchTest.cs" />
     <Compile Include="SaveTest.cs" />
     <Compile Include="SaveWithTransactionBlockTest.cs" />
     <Compile Include="SaveWithTransactionTest.cs" />

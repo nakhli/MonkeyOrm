@@ -11,7 +11,6 @@
 // <author>Chaker Nakhli</author>
 // <email>chaker.nakhli@sinbadsoft.com</email>
 // <date>2012/02/19</date>
-
 using System.Data.Common;
 
 using NUnit.Framework;
@@ -21,24 +20,6 @@ namespace MonkeyOrm.Tests
     [TestFixture]
     public class SaveTest : DbTestBase
     {
-        [TearDown]
-        public void TearDown()
-        {
-            this.ConnectionFactory().Execute(@"DROP TABLE IF EXISTS `Test`");
-        }
-
-        [SetUp]
-        public void SetUp()
-        {
-            this.ConnectionFactory().Execute(
-                @"CREATE TABLE `Test` (
-                    `Id` INT NOT NULL AUTO_INCREMENT,
-                    `DataInt` INT,
-                    `DataLong` BIGINT,
-                    `DataString` VARCHAR(50),                    
-                    PRIMARY KEY (`Id`)) AUTO_INCREMENT=0 ENGINE=InnoDB");            
-        }
-
         [Test]
         public void SaveAndReadBack()
         {

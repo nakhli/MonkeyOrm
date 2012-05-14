@@ -18,8 +18,12 @@ namespace MonkeyOrm.Tests
 {
     public class UpsertTest : DbTestBase
     {
+        public UpsertTest() : base(false)
+        {
+        }
+
         [TearDown]
-        public void TearDown()
+        public new void TearDown()
         {
             this.ConnectionFactory().Execute(@"DROP TABLE IF EXISTS `Test`");
         }
