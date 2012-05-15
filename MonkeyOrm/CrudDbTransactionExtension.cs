@@ -11,6 +11,8 @@
 // <author>Chaker Nakhli</author>
 // <email>chaker.nakhli@sinbadsoft.com</email>
 // <date>2012/05/04</date>
+
+using System;
 using System.Collections.Generic;
 using System.Data;
 
@@ -26,6 +28,16 @@ namespace MonkeyOrm
         public static List<dynamic> ReadAll(this IDbTransaction transaction, string query, object parameters = null)
         {
             return transaction.Connection.ReadAll(query, parameters, transaction);
+        }
+
+        public static IEnumerable<dynamic> ReadStream(this IDbTransaction transaction, string query, object parameters = null)
+        {
+            return transaction.Connection.ReadStream(query, parameters, transaction);
+        }
+
+        public static void ReadStream(this IDbTransaction transaction, string query, Func<dynamic, bool> action, object parameters = null)
+        {
+            transaction.Connection.ReadStream(query, action, parameters, transaction);
         }
 
         public static dynamic ReadOne(this IDbTransaction transaction, string query, object parameters = null)
