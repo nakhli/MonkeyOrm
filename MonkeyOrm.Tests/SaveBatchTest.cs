@@ -74,6 +74,28 @@ namespace MonkeyOrm.Tests
             }
         }
 
+        [Test]
+        public void InTransactionSavedEvenWithNoAutoCommit(
+            [Values(19, 50, 173, 1049)] int batchSize,
+            [Values(0, 1, 10, 17)] int chunkSize)
+        {
+            var batch = GenerateSamePropertySetBatch(batchSize).ToList();
+            int insertedRowsCount = this.ConnectionFactory().InTransaction(false).SaveBatch("Test", batch, chunkSize);
+            Assert.AreEqual(batchSize, insertedRowsCount);
+            this.ReadbackAndCheck(batch);
+        }
+
+        [Test]
+        public void InTransactionNotCommitted(
+            [Values(19, 50, 1049)] int batchSize,
+            [Values(0, 17)] int chunkSize)
+        {
+            var batch = GenerateSamePropertySetBatch(batchSize).ToList();
+            int insertedRowsCount = this.ConnectionFactory().InTransaction().Do(t => t.SaveBatch("Test", batch, chunkSize));
+            Assert.AreEqual(batchSize, insertedRowsCount);
+            Assert.AreEqual(0, this.ConnectionFactory().ReadAll("SELECT * FROM Test").Count);
+        }
+
         /// <summary>
         /// Generates a batch of objects all of them having the same property set.
         /// </summary>

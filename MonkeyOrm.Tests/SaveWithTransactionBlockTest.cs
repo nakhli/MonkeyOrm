@@ -83,6 +83,7 @@ namespace MonkeyOrm.Tests
                     }
                 });
 
+            Assert.True(id > 0);
             Assert.IsNull(this.ConnectionFactory().ReadOne("SELECT * FROM Test WHERE Id=@id", new { id }));
         }
     }

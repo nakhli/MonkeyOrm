@@ -18,6 +18,10 @@ namespace MonkeyOrm
 {
     public interface ITransactionScope
     {
+        bool AutoCommit { get; set; }
+
         void Do(Action<IDbTransaction> action);
+
+        T Do<T>(Func<IDbTransaction, T> action);
     }
 }

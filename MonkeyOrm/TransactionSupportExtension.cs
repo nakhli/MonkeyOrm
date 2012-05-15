@@ -39,20 +39,39 @@ namespace MonkeyOrm
 
             protected AbstractTransactionScope(bool autocommit = false, IsolationLevel? isolation = null)
             {
-                this.Autocommit = autocommit;
+                this.AutoCommit = autocommit;
                 this.isolation = isolation;
             }
 
-            public bool Autocommit { get; set; }
+            public bool AutoCommit { get; set; }
 
-            public abstract void Do(Action<IDbTransaction> action);
+            public void Do(Action<IDbTransaction> action)
+            {
+                this.Do(t => { action(t); return 0; });
+            }
+
+            public abstract T Do<T>(Func<IDbTransaction, T> action);
+
+            public T Do<T>(IDbConnection connection, Func<IDbTransaction, T> action)
+            {
+                using (var transaction = this.CreateTransaction(connection))
+                {
+                    T value = action(transaction);
+                    if (this.AutoCommit)
+                    {
+                        transaction.Commit();
+                    }
+
+                    return value;
+                }
+            }
 
             protected void Do(IDbConnection connection, Action<IDbTransaction> action)
             {
                 using (var transaction = this.CreateTransaction(connection))
                 {
                     action(transaction);
-                    if (this.Autocommit)
+                    if (this.AutoCommit)
                     {
                         transaction.Commit();
                     }
@@ -77,12 +96,12 @@ namespace MonkeyOrm
                 this.connectionFactory = connectionFactory;
             }
 
-            public override void Do(Action<IDbTransaction> action)
+            public override T Do<T>(Func<IDbTransaction, T> action)
             {
                 using (var connection = this.connectionFactory())
                 {
                     connection.Open();
-                    this.Do(connection, action);
+                    return this.Do(connection, action);
                 }
             }
         }
@@ -97,9 +116,9 @@ namespace MonkeyOrm
                 this.connection = connection;
             }
 
-            public override void Do(Action<IDbTransaction> action)
+            public override T Do<T>(Func<IDbTransaction, T> action)
             {
-                this.Do(this.connection, action);
+                return this.Do(this.connection, action);
             }
         }
     }
