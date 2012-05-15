@@ -11,7 +11,12 @@
 // <author>Chaker Nakhli</author>
 // <email>chaker.nakhli@sinbadsoft.com</email>
 // <date>2012/02/19</date>
+
+using System;
 using System.Collections.Generic;
+using System.Data;
+
+using Sinbadsoft.Lib.Model.ToExpando;
 
 namespace MonkeyOrm
 {
@@ -32,6 +37,31 @@ namespace MonkeyOrm
             {
                 connection.Open();
                 return connection.ReadAll(query, parameters);
+            }
+        }
+
+        public static IEnumerable<dynamic> ReadStream(this IConnectionFactory connectionFactory, string query, object parameters = null)
+        {
+            using (var connection = connectionFactory.Create())
+            {
+                connection.Open();
+                using (var command = connection.CreateCommand(query, parameters))
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        yield return reader.ToExpando();
+                    }
+                }
+            }
+        }
+
+        public static void ReadStream(this IConnectionFactory connectionFactory, string query, Func<dynamic, bool> action, object parameters = null)
+        {
+            using (var connection = connectionFactory.Create())
+            {
+                connection.Open();
+                connection.ReadStream(query, action, parameters);
             }
         }
 

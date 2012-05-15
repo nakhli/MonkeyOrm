@@ -27,7 +27,7 @@ namespace MonkeyOrm.Tests
             [Values(19, 50, 173, 200, 1000, 1049)] int batchSize,
             [Values(0, 1, 10, 17, 50, 51, 109)] int chunkSize)
         {
-            var batch = GenerateSamePropertySetBatch(batchSize).ToList();
+            var batch = GenerateBatch(batchSize).ToList();
             int insertedRowsCount = this.ConnectionFactory().SaveBatch("Test", batch, chunkSize);
             Assert.AreEqual(batchSize, insertedRowsCount);
             this.ReadbackAndCheck(batch);
@@ -38,7 +38,7 @@ namespace MonkeyOrm.Tests
             [Values(19, 50, 173, 200, 1000, 1049)] int batchSize,
             [Values(0, 1, 10, 17, 50, 51, 109)] int chunkSize)
         {
-            var batch = GenerateSamePropertySetBatch(batchSize).ToList();
+            var batch = GenerateBatch(batchSize).ToList();
             int insertedRowsCount = this.ConnectionFactory().SaveBatch("Test", batch, chunkSize, new[] { "DataInt", "DataLong" });
             Assert.AreEqual(batchSize, insertedRowsCount);
             this.ReadbackAndCheck(batch, true);
@@ -49,7 +49,7 @@ namespace MonkeyOrm.Tests
             [Values(19, 50, 173, 200, 1000, 1049)] int batchSize,
             [Values(0, 1, 10, 17, 50, 51, 109)] int chunkSize)
         {
-            var batch = GenerateSamePropertySetBatch(200).ToList();
+            var batch = GenerateBatch(200).ToList();
             int insertedRowsCount = this.ConnectionFactory().SaveBatch("Test", batch, chunkSize, blacklist: new[] { "DataString" });
             Assert.AreEqual(batch.Count, insertedRowsCount);
             this.ReadbackAndCheck(batch, true);
@@ -70,7 +70,7 @@ namespace MonkeyOrm.Tests
             var insertedData = this.ConnectionFactory().ReadAll("SELECT * FROM Test");
             for (var i = 0; i < batch.Count; i++)
             {
-                CheckValues(batch[i], insertedData[i], i == 2);
+                CheckTestObject(batch[i], insertedData[i], i == 2);
             }
         }
 
@@ -79,7 +79,7 @@ namespace MonkeyOrm.Tests
             [Values(19, 50, 173, 1049)] int batchSize,
             [Values(0, 1, 10, 17)] int chunkSize)
         {
-            var batch = GenerateSamePropertySetBatch(batchSize).ToList();
+            var batch = GenerateBatch(batchSize).ToList();
             int insertedRowsCount = this.ConnectionFactory().InTransaction(false).SaveBatch("Test", batch, chunkSize);
             Assert.AreEqual(batchSize, insertedRowsCount);
             this.ReadbackAndCheck(batch);
@@ -90,28 +90,10 @@ namespace MonkeyOrm.Tests
             [Values(19, 50, 1049)] int batchSize,
             [Values(0, 17)] int chunkSize)
         {
-            var batch = GenerateSamePropertySetBatch(batchSize).ToList();
+            var batch = GenerateBatch(batchSize).ToList();
             int insertedRowsCount = this.ConnectionFactory().InTransaction().Do(t => t.SaveBatch("Test", batch, chunkSize));
             Assert.AreEqual(batchSize, insertedRowsCount);
             Assert.AreEqual(0, this.ConnectionFactory().ReadAll("SELECT * FROM Test").Count);
-        }
-
-        /// <summary>
-        /// Generates a batch of objects all of them having the same property set.
-        /// </summary>
-        private static IEnumerable<object> GenerateSamePropertySetBatch(int size)
-        {
-            for (int i = 0; i < size; i++)
-            {
-                yield return new { DataInt = 5 * i, DataLong = 3000000000L + (1000 * i), DataString = "hello world" + i };
-            }
-        }
-
-        private static void CheckValues(dynamic expected, dynamic actual, bool defaultValueForString = false)
-        {
-            Assert.AreEqual(expected.DataInt, actual.DataInt);
-            Assert.AreEqual(expected.DataLong, actual.DataLong);
-            Assert.AreEqual(defaultValueForString ? "A Default Value" : expected.DataString, actual.DataString);
         }
 
         private void ReadbackAndCheck(IList<object> batch, bool defaultValueForString = false)
@@ -119,7 +101,7 @@ namespace MonkeyOrm.Tests
             var insertedData = this.ConnectionFactory().ReadAll("SELECT * FROM Test");
             for (var i = 0; i < batch.Count; i++)
             {
-                CheckValues(batch[i], insertedData[i], defaultValueForString);
+                CheckTestObject(batch[i], insertedData[i], defaultValueForString);
             }
         }
     }

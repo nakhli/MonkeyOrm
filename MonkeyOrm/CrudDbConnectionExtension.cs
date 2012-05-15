@@ -40,6 +40,30 @@ namespace MonkeyOrm
             }
         }
 
+        public static IEnumerable<dynamic> ReadStream(this IDbConnection connection, string query, object parameters = null, IDbTransaction transaction = null)
+        {
+            using (var command = connection.CreateCommand(query, parameters, transaction))
+            using (var reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    yield return reader.ToExpando();
+                }
+            }
+        }
+
+        public static void ReadStream(this IDbConnection connection, string query, Func<dynamic, bool> action, object parameters = null, IDbTransaction transaction = null)
+        {
+            using (var command = connection.CreateCommand(query, parameters, transaction))
+            using (var reader = command.ExecuteReader())
+            {
+                while (reader.Read() && action(reader.ToExpando()))
+                {
+                    // do nothing
+                }
+            }
+        }
+
         public static dynamic ReadOne(this IDbConnection connection, string query, object parameters = null, IDbTransaction transaction = null)
         {
             using (var command = connection.CreateCommand(query, parameters, transaction))

@@ -12,6 +12,7 @@
 // <email>chaker.nakhli@sinbadsoft.com</email>
 // <date>2012/02/19</date>
 using System;
+using System.Collections.Generic;
 using System.Data;
 
 using MySql.Data.MySqlClient;
@@ -75,6 +76,24 @@ namespace MonkeyOrm.Tests
             if (this.CreateTestTable)
             {
                 this.ConnectionFactory().Execute(@"DROP TABLE IF EXISTS `Test`");
+            }
+        }
+
+        protected static void CheckTestObject(dynamic expected, dynamic actual, bool defaultValueForString = false)
+        {
+            Assert.AreEqual(expected.DataInt, actual.DataInt);
+            Assert.AreEqual(expected.DataLong, actual.DataLong);
+            Assert.AreEqual(defaultValueForString ? "A Default Value" : expected.DataString, actual.DataString);
+        }
+
+        /// <summary>
+        /// Generates a batch of objects all of them having the same property set.
+        /// </summary>
+        protected static IEnumerable<object> GenerateBatch(int size)
+        {
+            for (int i = 0; i < size; i++)
+            {
+                yield return new { DataInt = 5 * i, DataLong = 3000000000L + (1000 * i), DataString = "hello world" + i };
             }
         }
 

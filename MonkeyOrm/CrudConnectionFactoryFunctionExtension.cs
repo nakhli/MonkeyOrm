@@ -15,6 +15,8 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 
+using Sinbadsoft.Lib.Model.ToExpando;
+
 namespace MonkeyOrm
 {
     public static class CrudConnectionFactoryFunctionExtension
@@ -34,6 +36,31 @@ namespace MonkeyOrm
             {
                 connection.Open();
                 return connection.ReadAll(query, parameters);
+            }
+        }
+
+        public static IEnumerable<dynamic> ReadStream(this Func<IDbConnection> connectionFactory, string query, object parameters = null)
+        {
+            using (var connection = connectionFactory())
+            {
+                connection.Open();
+                using (var command = connection.CreateCommand(query, parameters))
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        yield return reader.ToExpando();
+                    }
+                }
+            }
+        }
+
+        public static void ReadStream(this Func<IDbConnection> connectionFactory, string query, Func<dynamic, bool> action, object parameters = null)
+        {
+            using (var connection = connectionFactory())
+            {
+                connection.Open();
+                connection.ReadStream(query, action, parameters);
             }
         }
 
