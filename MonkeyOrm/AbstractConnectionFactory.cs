@@ -10,7 +10,7 @@
 // </copyright>
 // <author>Chaker Nakhli</author>
 // <email>chaker.nakhli@sinbadsoft.com</email>
-// <date>2012/0504</date>
+// <date>2012/05/04</date>
 using System;
 using System.Data;
 

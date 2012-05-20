@@ -19,8 +19,14 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyTitle("MonkeyOrm")]
 [assembly: AssemblyDescription(@"A small and powerful ORM that doesn't get in your way.
-Features: Built-in CRUD including upserts, transactions, bulk-fetching, data streaming, batch insertion and blobbing.
-No fancy DSLs (e.g. HQL), no extra code or attributes and no xml. Just your POCOs and plain old SQL.")]
+Features: Built-in CRUD: Create, Read, Update, Delete and Create-or-Update;
+Transactions;
+Bulk-fetching;
+Data streaming;
+Batch insertion;
+Blobbing;
+No DSLs (e.g. HQL);
+No extra code: no base class to inherit from, no attributes and no xml. Just your POCOs and plain old SQL.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Sinbadsoft")]
 [assembly: AssemblyProduct("MonkeyOrm")]
