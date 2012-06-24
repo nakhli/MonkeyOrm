@@ -35,7 +35,7 @@ namespace MonkeyOrm.Tests
                 @"CREATE TABLE `Test` (`Id` INT NOT NULL,`Data` INT,PRIMARY KEY (`Id`)) ENGINE=InnoDB");
             this.ConnectionFactory().Save("Test", new { Id = 10, Data = 5 });
             Assert.AreEqual(5, this.ConnectionFactory().ReadOne("SELECT * FROM Test").Data);
-            this.ConnectionFactory().Upsert("Test", new { Id = 10, Data = 34 });
+            this.ConnectionFactory().SaveOrUpdate("Test", new { Id = 10, Data = 34 });
             List<dynamic> all = this.ConnectionFactory().ReadAll("SELECT * FROM Test");
             Assert.AreEqual(1, all.Count);
             Assert.AreEqual(34, all[0].Data);
@@ -50,7 +50,7 @@ namespace MonkeyOrm.Tests
                   UNIQUE KEY `Uq` (`A`, `B`)) ENGINE=InnoDB");
             this.ConnectionFactory().Save("Test", new { A = 5, B = 3, C = 123 });
             Assert.AreEqual(123, this.ConnectionFactory().ReadOne("SELECT * FROM Test").C);
-            this.ConnectionFactory().Upsert("Test", new { A = 5, B = 3, C = -1 });
+            this.ConnectionFactory().SaveOrUpdate("Test", new { A = 5, B = 3, C = -1 });
             List<dynamic> all = this.ConnectionFactory().ReadAll("SELECT * FROM Test");
             Assert.AreEqual(-1, all[0].C);
         }
@@ -64,7 +64,7 @@ namespace MonkeyOrm.Tests
                   UNIQUE KEY `Uq` (`A`, `B`)) ENGINE=InnoDB");
             this.ConnectionFactory().Save("Test", new { Id = 10, A = 5, B = 3, C = 123 });
             Assert.AreEqual(123, this.ConnectionFactory().ReadOne("SELECT * FROM Test").C);
-            this.ConnectionFactory().Upsert("Test", new { Id = 10, A = 5, B = 3, C = -1 });
+            this.ConnectionFactory().SaveOrUpdate("Test", new { Id = 10, A = 5, B = 3, C = -1 });
             List<dynamic> all = this.ConnectionFactory().ReadAll("SELECT * FROM Test");
             Assert.AreEqual(-1, all[0].C);
         }
@@ -74,7 +74,7 @@ namespace MonkeyOrm.Tests
         {
             this.ConnectionFactory().Execute(
                 @"CREATE TABLE `Test` (`Id` INT NOT NULL,`Data` INT,PRIMARY KEY (`Id`)) ENGINE=InnoDB");
-            this.ConnectionFactory().Upsert("Test", new { Id = 10, Data = 34 });
+            this.ConnectionFactory().SaveOrUpdate("Test", new { Id = 10, Data = 34 });
             Assert.AreEqual(34, this.ConnectionFactory().ReadOne("SELECT * FROM Test").Data);
         }
     }

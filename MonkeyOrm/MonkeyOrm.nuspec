@@ -18,7 +18,7 @@
       <dependency id="Sinbadsoft.Lib.Model" />
     </dependencies>
     <releaseNotes>
-      * Added support for transactions: transactions now have the same extension methods as connections.
+      * Added interceptor to handle data with complex types.This enables blobbing on insertion.
     </releaseNotes>
   </metadata>
 </package>

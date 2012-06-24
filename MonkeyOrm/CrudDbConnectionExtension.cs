@@ -143,7 +143,7 @@ namespace MonkeyOrm
             return affectedRows;
         }
 
-        public static int Upsert(this IDbConnection connection, string table, object values, IEnumerable<string> whitelist = null, IEnumerable<string> blacklist = null, IDbTransaction transaction = null)
+        public static int SaveOrUpdate(this IDbConnection connection, string table, object values, IEnumerable<string> whitelist = null, IEnumerable<string> blacklist = null, IDbTransaction transaction = null)
         {
             using (var command = connection.CreateUpsertCommand(table, values, whitelist, blacklist, transaction))
             {

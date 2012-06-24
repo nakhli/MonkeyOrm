@@ -15,6 +15,8 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 
+using MySql.Data.MySqlClient;
+
 using Sinbadsoft.Lib.Model.ToExpando;
 
 namespace MonkeyOrm
@@ -42,20 +44,17 @@ namespace MonkeyOrm
         {
             var parameter = cmd.CreateParameter();
             parameter.ParameterName = name;
-            if (value == null)
+
+            if (value == null 
+                || value is Guid
+                || value is TimeSpan
+                || Type.GetTypeCode(value.GetType()) != TypeCode.Object)
             {
-                parameter.Value = DBNull.Value;
-            }
-            else if (value is Guid)
-            {
-                var guidItem = (Guid)value;
-                parameter.Value = guidItem.ToByteArray();
-                parameter.DbType = DbType.Binary;
-                parameter.Size = 16;
+                parameter.Value = value ?? DBNull.Value;
             }
             else
             {
-                parameter.Value = value;
+                parameter.Value = MonkeyOrm.Settings.Interceptors.UnknownValueType(value);
             }
 
             cmd.Parameters.Add(parameter);

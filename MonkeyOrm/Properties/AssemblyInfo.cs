@@ -19,18 +19,22 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyTitle("MonkeyOrm")]
 [assembly: AssemblyDescription(@"A small and powerful ORM that doesn't get in your way.
-Features: Built-in CRUD: Create, Read, Update, Delete and Create-or-Update;
-Transactions;
-Bulk-fetching;
-Data streaming;
-Batch insertion;
-Blobbing;
-No DSLs (e.g. HQL);
-No extra code: no base class to inherit from, no attributes and no xml. Just your POCOs and plain old SQL.")]
+Features:
+* Built-in CRUD: Create, Read, Update, Delete and Create-or-Update (aka Upsert); 
+* Transactions; 
+* Object slicing support for insertion using black lists or white lists; 
+* Bulk-fetching; 
+* Data streaming; 
+* Batch insertion, with fine-grained control on number of inserted objects per query; 
+* Blobbing; 
+* No fancy DSL, only SQL;
+* Stateless, no caching;
+* Doesn't pollute your code: no base classes to inherit from, no attributes and no xml config;
+* Easy to adopt, easy to get rid off: It's just your POCOs and plain old SQL;")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Sinbadsoft")]
 [assembly: AssemblyProduct("MonkeyOrm")]
-[assembly: AssemblyCopyright("Copyright © Sinbadsoft 2011")]
+[assembly: AssemblyCopyright("Copyright © Sinbadsoft 2011-2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -52,5 +56,5 @@ No extra code: no base class to inherit from, no attributes and no xml. Just you
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.4.0.0")]
+[assembly: AssemblyVersion("0.4.1.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]

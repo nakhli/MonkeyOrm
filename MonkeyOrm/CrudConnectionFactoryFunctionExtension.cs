@@ -118,12 +118,12 @@ namespace MonkeyOrm
             }
         }
 
-        public static int Upsert(this Func<IDbConnection> connectionFactory, string table, object values, IEnumerable<string> whitelist = null, IEnumerable<string> blacklist = null)
+        public static int SaveOrUpdate(this Func<IDbConnection> connectionFactory, string table, object values, IEnumerable<string> whitelist = null, IEnumerable<string> blacklist = null)
         {
             using (var connection = connectionFactory())
             {
                 connection.Open();
-                return connection.Upsert(table, values, whitelist, blacklist);
+                return connection.SaveOrUpdate(table, values, whitelist, blacklist);
             }
         }
 

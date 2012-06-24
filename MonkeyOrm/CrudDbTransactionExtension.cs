@@ -65,9 +65,9 @@ namespace MonkeyOrm
             return transaction.Connection.SaveBatch(table, batch, chunkSize, whitelist, blacklist, transaction);
         }
 
-        public static int Upsert(this IDbTransaction transaction, string table, object values, IEnumerable<string> whitelist = null, IEnumerable<string> blacklist = null)
+        public static int SaveOrUpdate(this IDbTransaction transaction, string table, object values, IEnumerable<string> whitelist = null, IEnumerable<string> blacklist = null)
         {
-            return transaction.Connection.Upsert(table, values, whitelist, blacklist, transaction);
+            return transaction.Connection.SaveOrUpdate(table, values, whitelist, blacklist, transaction);
         }
 
         public static int Update(this IDbTransaction transaction, string table, object values, string where, object parameters = null, IEnumerable<string> whitelist = null, IEnumerable<string> blacklist = null)
