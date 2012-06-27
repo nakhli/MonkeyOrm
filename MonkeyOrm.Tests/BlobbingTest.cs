@@ -24,14 +24,23 @@ namespace MonkeyOrm.Tests
     [TestFixture]
     public class BlobbingTest : DbTestBase
     {
+        private Func<object, object> oldUnknownValueTypeInterceptor;
+
         public BlobbingTest() : base(false)
         {
+        }
+
+        [SetUp]
+        public new void SetUp()
+        {
+            this.oldUnknownValueTypeInterceptor = MonkeyOrm.Settings.Interceptors.UnknownValueType;
         }
 
         [TearDown]
         public new void TearDown()
         {
             this.ConnectionFactory().Execute(@"DROP TABLE IF EXISTS `Test`");
+            MonkeyOrm.Settings.Interceptors.UnknownValueType = this.oldUnknownValueTypeInterceptor;
         }
 
         [Test]
