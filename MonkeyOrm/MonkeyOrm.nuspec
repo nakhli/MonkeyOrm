@@ -18,7 +18,8 @@
       <dependency id="Sinbadsoft.Lib.Model" />
     </dependencies>
     <releaseNotes>
-      * Added interceptor to handle data with complex types.This enables blobbing on insertion.
+      * Fixed null ref exception bug in unknown value type interceptor IInterceptor.UnknownValueType
+      * Added missing byte[] and char[] types to known value types for parameters
     </releaseNotes>
   </metadata>
 </package>

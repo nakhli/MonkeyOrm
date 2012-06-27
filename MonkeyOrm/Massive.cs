@@ -37,8 +37,9 @@ namespace MonkeyOrm
         }
 
         /// <summary>
-        /// Adds a parameter with the given name and value. <see cref="Guid"/> are translated to
-        /// a 16 bytes array. Null values will insert <see cref="DBNull.Value"/>.
+        /// Adds a parameter with the given name and value.
+        /// Calls the <see cref="IInterceptors.UnknownValueType"/> for values of unknown types.
+        /// Null values are inserted as <see cref="DBNull.Value"/>.
         /// </summary>
         public static void AddObjectParameter(this IDbCommand cmd, string name, object value)
         {
@@ -48,6 +49,8 @@ namespace MonkeyOrm
             if (value == null 
                 || value is Guid
                 || value is TimeSpan
+                || value is byte[]
+                || value is char[]
                 || Type.GetTypeCode(value.GetType()) != TypeCode.Object)
             {
                 parameter.Value = value ?? DBNull.Value;

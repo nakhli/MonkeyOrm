@@ -17,7 +17,7 @@ namespace MonkeyOrm
 {
     internal class Interceptors : IInterceptors
     {
-        private Func<object, object> unknownValueType;
+        private Func<object, object> unknownValueType = x => x;
 
         public Func<object, object> UnknownValueType
         {
