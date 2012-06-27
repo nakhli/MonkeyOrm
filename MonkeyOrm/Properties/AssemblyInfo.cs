@@ -17,12 +17,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MonkeyOrm")]
+[assembly: AssemblyTitle("MonkeyOrm.MySql")]
 [assembly: AssemblyDescription(@"A small and powerful ORM that doesn't get in your way.
 Features:
 * Built-in CRUD: Create, Read, Update, Delete and Create-or-Update (aka Upsert); 
 * Transactions; 
-* Object slicing support for insertion using black lists or white lists; 
+* Objects slicing on insertion with a black list or a white list; 
 * Bulk-fetching; 
 * Data streaming; 
 * Batch insertion, with fine-grained control on number of inserted objects per query; 
@@ -33,7 +33,7 @@ Features:
 * Easy to adopt, easy to get rid off: It's just your POCOs and plain old SQL;")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Sinbadsoft")]
-[assembly: AssemblyProduct("MonkeyOrm")]
+[assembly: AssemblyProduct("MonkeyOrm.MySql")]
 [assembly: AssemblyCopyright("Copyright © Sinbadsoft 2011-2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -56,5 +56,5 @@ Features:
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.4.1.0")]
+[assembly: AssemblyVersion("0.4.2.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]

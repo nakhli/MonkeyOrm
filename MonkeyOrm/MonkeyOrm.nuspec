@@ -8,11 +8,11 @@
     <description>$description$</description>
     <summary>$description$</summary>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <tags>orm database mysql</tags>
+    <tags>orm dal database mysql</tags>
     <language>en-US</language>
     <owners>Sinbadsoft</owners>
     <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
-    <projectUrl>https://github.com/Sinbadsoft/Sinbadsoft.Lib</projectUrl>
+    <projectUrl>http://www.monkeyorm.com</projectUrl>
     <copyright>Copyright (c) Chaker Nakhli 2010-2012. Licensed under the Apache License, Version 2.0</copyright>
     <dependencies>
       <dependency id="Sinbadsoft.Lib.Model" />
