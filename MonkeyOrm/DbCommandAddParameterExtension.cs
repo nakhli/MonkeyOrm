@@ -1,4 +1,4 @@
-﻿// <copyright file="Massive.cs" company="Sinbadsoft">
+﻿// <copyright file="DbCommandAddParameterExtension.cs" company="Sinbadsoft">
 // Copyright (c) Chaker Nakhli 2010-2012
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not use
 // this file except in compliance with the License. You may obtain a copy of the 
@@ -12,16 +12,13 @@
 // <email>chaker.nakhli@sinbadsoft.com</email>
 // <date>2010/11/04</date>
 using System;
-using System.Collections.Generic;
 using System.Data;
-
-using MySql.Data.MySqlClient;
 
 using Sinbadsoft.Lib.Model.ToExpando;
 
 namespace MonkeyOrm
 {
-    public static class Massive
+    public static class DbCommandAddParameterExtension
     {
         /// <summary>
         /// Extension method for adding parameters based on object list.
@@ -74,20 +71,6 @@ namespace MonkeyOrm
             {
                 command.AddObjectParameter(parameter.Key, parameter.Value);
             }
-        }
-
-        /// <summary>
-        /// Turns an IDataReader to a Dynamic list of things
-        /// </summary>
-        public static List<dynamic> ToExpandoList(this IDataReader reader)
-        {
-            var result = new List<dynamic>();
-            while (reader.Read())
-            {
-                result.Add(reader.ToExpando());
-            }
-
-            return result;
         }
     }
 }

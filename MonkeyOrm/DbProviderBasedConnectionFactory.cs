@@ -19,17 +19,17 @@ namespace MonkeyOrm
     /// <summary>
     /// An implementation of <see cref="IConnectionFactory"/> based on <see cref="DbProviderFactory"/>.
     /// </summary>
-    public abstract class DbProviderBasedConnectionFactory : AbstractConnectionFactory
+    public class DbProviderBasedConnectionFactory : AbstractConnectionFactory
     {
         private readonly string providerName;
 
-        protected DbProviderBasedConnectionFactory(string providerName, string connectionString)
+        public DbProviderBasedConnectionFactory(string providerName, string connectionString)
             : base(connectionString)
         {
             this.providerName = providerName;
         }
 
-        protected DbProviderFactory DbProviderFactory
+        public DbProviderFactory DbProviderFactory
         {
             get { return DbProviderFactories.GetFactory(this.providerName); }
         }

@@ -18,8 +18,7 @@
       <dependency id="Sinbadsoft.Lib.Model" />
     </dependencies>
     <releaseNotes>
-      * Fixed null ref exception bug in unknown value type interceptor IInterceptor.UnknownValueType
-      * Added missing byte[] and char[] types to known value types for parameters
+      * DbProviderBasedConnectionFactory made concrete with public constructor.
     </releaseNotes>
   </metadata>
 </package>

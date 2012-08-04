@@ -36,7 +36,13 @@ namespace MonkeyOrm
             using (var command = connection.CreateCommand(query, parameters, transaction))
             using (var reader = command.ExecuteReader())
             {
-                return reader.ToExpandoList();
+                var result = new List<dynamic>();
+                while (reader.Read())
+                {
+                    result.Add(reader.ToExpando());
+                }
+
+                return result;
             }
         }
 
