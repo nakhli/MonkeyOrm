@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="MonkeyOrm : A small and powerful ORM that doesn't get in your way." />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>MonkeyOrm</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Sinbadsoft/MonkeyOrm">View on GitHub</a>
+
+          <h1 id="project_title">MonkeyOrm</h1>
+          <h2 id="project_tagline">A small and powerful ORM that doesn't get in your way.</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/Sinbadsoft/MonkeyOrm/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/Sinbadsoft/MonkeyOrm/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h2>Save anything</h2>
+
+<p>POCOs:</p>
+
+<div class="highlight"><pre><span class="n">connection</span><span class="p">.</span><span class="n">Save</span><span class="p">(</span><span class="s">"Users"</span><span class="p">,</span> <span class="k">new</span> <span class="n">User</span> <span class="p">{</span> <span class="n">Name</span> <span class="p">=</span> <span class="s">"Anne"</span><span class="p">,</span> <span class="n">Age</span> <span class="p">=</span> <span class="m">31</span> <span class="p">});</span>
+</pre></div>
+
+<p>Anonymous:</p>
+
+<div class="highlight"><pre><span class="n">connection</span><span class="p">.</span><span class="n">Save</span><span class="p">(</span><span class="s">"Users"</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">Name</span> <span class="p">=</span> <span class="s">"Jhon"</span><span class="p">,</span> <span class="n">Age</span> <span class="p">=</span> <span class="m">26</span> <span class="p">});</span>
+</pre></div>
+
+<p>Hashes: Dictionary&lt;&gt;, Dictionary, ExpandoObject or NameValueCollection</p>
+
+<div class="highlight"><pre><span class="n">connection</span><span class="p">.</span><span class="n">Save</span><span class="p">(</span><span class="s">"Users"</span><span class="p">,</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">object</span><span class="p">&gt;</span>
+                                <span class="p">{</span>
+                                    <span class="p">{</span> <span class="s">"Name"</span><span class="p">,</span> <span class="s">"Fred"</span> <span class="p">},</span>
+                                    <span class="p">{</span> <span class="s">"Age"</span><span class="p">,</span> <span class="m">22</span> <span class="p">}</span>
+                                <span class="p">});</span>
+</pre></div>
+
+<p>Get back the auto generated serial id if any:</p>
+
+<div class="highlight"><pre><span class="kt">int</span> <span class="n">pabloId</span><span class="p">;</span>
+<span class="n">connection</span><span class="p">.</span><span class="n">Save</span><span class="p">(</span><span class="s">"Users"</span><span class="p">,</span> <span class="k">new</span> <span class="n">User</span> <span class="p">{</span> <span class="n">Name</span> <span class="p">=</span> <span class="s">"Pablo"</span><span class="p">,</span> <span class="n">Age</span> <span class="p">=</span> <span class="m">49</span> <span class="p">},</span> <span class="k">out</span> <span class="n">pabloId</span><span class="p">);</span>
+</pre></div>
+
+<h5>What the heck is <code>connection</code>?</h5>
+
+<p>In order to make things easier for the client code, the above extension methods are defined for a bunch of types. Actually, <code>connection</code> can be a: <a href="http://msdn.microsoft.com/en-us/library/system.data.idbconnection.aspx">IDbConnection</a>, <a href="http://msdn.microsoft.com/en-us/library/system.data.idbtransaction.aspx">IDbTransaction</a>, 
+any function acting as a connection factory Func or the MonkeyOrm defined interface <a href="https://github.com/Sinbadsoft/MonkeyOrm/blob/master/MonkeyOrm/IConnectionFactory.cs">IConnectionFactory</a>.</p>
+
+<h2>Read just one item</h2>
+
+<p>Reads only the first element, if any, from the result set.</p>
+
+<div class="highlight"><pre><span class="kt">var</span> <span class="n">joe</span> <span class="p">=</span> <span class="n">connection</span><span class="p">.</span><span class="n">ReadOne</span><span class="p">(</span><span class="s">"Select * From Users Where @Id = id"</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">id</span> <span class="p">=</span> <span class="m">1</span> <span class="p">});</span>
+</pre></div>
+
+<p>You can also read computed data</p>
+
+<div class="highlight"><pre><span class="kt">var</span> <span class="n">stats</span> <span class="p">=</span> <span class="n">connection</span><span class="p">.</span><span class="n">ReadOne</span><span class="p">(</span><span class="s">"Select Max(Age) As Max, Min(Age) As Min From Users"</span><span class="p">);</span>
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"Max {0} - Min {1}"</span><span class="p">,</span> <span class="n">stats</span><span class="p">.</span><span class="n">Max</span><span class="p">,</span> <span class="n">stats</span><span class="p">.</span><span class="n">Min</span><span class="p">);</span>
+</pre></div>
+
+<h2>Read'em All</h2>
+
+<p>Bulk fetches the whole result set in memory as a list.</p>
+
+<div class="highlight"><pre><span class="kt">var</span> <span class="n">users</span> <span class="p">=</span> <span class="n">connection</span><span class="p">.</span><span class="n">ReadAll</span><span class="p">(</span><span class="s">"Select * From Users Where Age &gt; @age"</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">age</span> <span class="p">=</span> <span class="m">30</span> <span class="p">});</span>
+</pre></div>
+
+<h2>Stream Reading</h2>
+
+<p>Wraps query results in an enumerable. Items are then lazily loaded on enumeration. Here is an example how records (thousands or millions) can be streamed to a file:</p>
+
+<div class="highlight"><pre><span class="kt">var</span> <span class="n">userStream</span> <span class="p">=</span> <span class="n">connection</span><span class="p">.</span><span class="n">ReadStream</span><span class="p">(</span><span class="s">"Select * From Users"</span><span class="p">);</span>
+
+<span class="n">using</span><span class="p">(</span><span class="kt">var</span> <span class="n">fileStream</span> <span class="p">=</span> <span class="k">new</span> <span class="n">StreamWriter</span><span class="p">(</span><span class="n">Path</span><span class="p">.</span><span class="n">GetTempFileName</span><span class="p">()))</span>
+<span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">user</span> <span class="k">in</span> <span class="n">userStream</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">fileStream</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"{0} - {1}"</span><span class="p">,</span> <span class="n">user</span><span class="p">.</span><span class="n">Name</span><span class="p">,</span> <span class="n">user</span><span class="p">.</span><span class="n">Age</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+<h2>Update</h2>
+
+<div class="highlight"><pre><span class="n">connection</span><span class="p">.</span><span class="n">Update</span><span class="p">(</span><span class="s">"Users"</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">CanBuyAlchohol</span> <span class="p">=</span> <span class="k">true</span> <span class="p">},</span> <span class="s">"Age &gt;= @age"</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">age</span> <span class="p">=</span> <span class="m">21</span> <span class="p">});</span>
+</pre></div>
+
+<h2>Save or Update</h2>
+
+<p>aka Upsert. Attempts to save the data. If a record with the same key is already present, it is updated.</p>
+
+<div class="highlight"><pre><span class="n">connection</span><span class="p">.</span><span class="n">SaveOrUpdate</span><span class="p">(</span><span class="s">"Users"</span><span class="p">,</span> <span class="k">new</span> <span class="n">User</span> <span class="p">{</span> <span class="n">Name</span> <span class="p">=</span> <span class="s">"Anne"</span><span class="p">,</span> <span class="n">Age</span> <span class="p">=</span> <span class="m">32</span> <span class="p">});</span>
+</pre></div>
+
+<h2>Delete</h2>
+
+<div class="highlight"><pre><span class="n">connection</span><span class="p">.</span><span class="n">Delete</span><span class="p">(</span><span class="s">"Users"</span><span class="p">,</span> <span class="s">"Name=@name"</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">name</span> <span class="p">=</span> <span class="s">"Sauron"</span> <span class="p">});</span>
+</pre></div>
+
+<h2>Transactions</h2>
+
+<div class="highlight"><pre><span class="kt">int</span> <span class="n">spockId</span> <span class="p">=</span> <span class="n">connection</span><span class="p">.</span><span class="n">InTransaction</span><span class="p">(</span><span class="n">autocommit</span><span class="p">:</span> <span class="k">true</span><span class="p">).</span><span class="n">Do</span><span class="p">(</span><span class="n">t</span> <span class="p">=&gt;</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">id</span><span class="p">;</span>
+    <span class="n">t</span><span class="p">.</span><span class="n">Save</span><span class="p">(</span><span class="s">"Users"</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">Name</span> <span class="p">=</span> <span class="s">"Spock"</span><span class="p">,</span> <span class="n">Age</span> <span class="p">=</span> <span class="m">55</span> <span class="p">},</span> <span class="k">out</span> <span class="n">id</span><span class="p">);</span>
+    <span class="n">t</span><span class="p">.</span><span class="n">Save</span><span class="p">(</span><span class="s">"Profiles"</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">UserId</span> <span class="p">=</span> <span class="n">id</span><span class="p">,</span> <span class="n">Bio</span> <span class="p">=</span> <span class="s">"Federation Ambassador"</span> <span class="p">});</span>
+    <span class="k">return</span> <span class="n">id</span><span class="p">;</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>The transaction block return a value of any type or return void. The transaction can be manually committed at any point by invoking <code>t.Commit()</code>. Setting <code>autocommit</code> to <code>true</code> will insert a call to <code>Commit()</code> at the end of the block execution.</p>
+
+<p>Transaction isolation level can be controlled through the <code>isolation</code> parameter:</p>
+
+<div class="highlight"><pre><span class="n">connection</span><span class="p">.</span><span class="n">InTransaction</span><span class="p">(</span><span class="k">true</span><span class="p">,</span> <span class="n">IsolationLevel</span><span class="p">.</span><span class="n">Serializable</span><span class="p">).</span><span class="n">Do</span><span class="p">(</span><span class="n">t</span> <span class="p">=&gt;</span>
+<span class="p">{</span>
+    <span class="kt">var</span> <span class="n">james</span> <span class="p">=</span> <span class="n">t</span><span class="p">.</span><span class="n">ReadOne</span><span class="p">(</span><span class="s">"Select * From Users Where Name=@name"</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">name</span> <span class="p">=</span> <span class="s">"James"</span> <span class="p">});</span>
+    <span class="n">t</span><span class="p">.</span><span class="n">Update</span><span class="p">(</span><span class="s">"Users"</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">Age</span> <span class="p">=</span> <span class="n">james</span><span class="p">.</span><span class="n">Age</span> <span class="p">+</span> <span class="m">15</span> <span class="p">},</span> <span class="s">"Id=@Id"</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">james</span><span class="p">.</span><span class="n">Id</span> <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+
+<h2>Batch insertion</h2>
+
+<p>Batch insertion enables insertion of enumerable data sets; whether this data set is held in memory or streamed from any other source (file, database, network etc.).</p>
+
+<div class="highlight"><pre><span class="n">connection</span><span class="p">.</span><span class="n">SaveBatch</span><span class="p">(</span><span class="s">"Users"</span><span class="p">,</span> <span class="k">new</span><span class="p">[]</span>
+    <span class="p">{</span>
+        <span class="k">new</span> <span class="n">User</span> <span class="p">{</span> <span class="n">Name</span> <span class="p">=</span> <span class="s">"Monica"</span><span class="p">,</span> <span class="n">Age</span> <span class="p">=</span> <span class="m">34</span> <span class="p">},</span>
+        <span class="k">new</span> <span class="n">User</span> <span class="p">{</span> <span class="n">Name</span> <span class="p">=</span> <span class="s">"Fred"</span><span class="p">,</span> <span class="n">Age</span> <span class="p">=</span> <span class="m">58</span> <span class="p">},</span>
+        <span class="c1">// ...</span>
+    <span class="p">});</span>
+</pre></div>
+
+<p>By default, one object at a time is read from the provided set and inserted in the database. In order to tune performance/bandwidth more elements can be loaded and inserted at once through the <code>chunkSize</code> parameter.</p>
+
+<p>In the following snippet, 100 objects are loaded and inserted at a time from the provided enumerable.</p>
+
+<div class="highlight"><pre><span class="n">connection</span><span class="p">.</span><span class="n">SaveBatch</span><span class="p">(</span><span class="s">"Users"</span><span class="p">,</span> <span class="n">LoadDataFromRemoteSource</span><span class="p">(),</span> <span class="m">100</span><span class="p">);</span>
+</pre></div>
+
+<p>Batch insertion can also be wrapped in a transaction</p>
+
+<div class="highlight"><pre><span class="n">connection</span><span class="p">.</span><span class="n">InTransaction</span><span class="p">().</span><span class="n">SaveBatch</span><span class="p">(</span><span class="s">"Users"</span><span class="p">,</span> <span class="n">users</span><span class="p">);</span>
+</pre></div>
+
+<h1>Features Summary</h1>
+
+<ul>
+<li>CRUD with No code annotations; No config files and No base classes to inherit from.</li>
+<li>Transactions.</li>
+<li>Object slicing on insertion with white or black lists.</li>
+<li>Bulk-fetching: fetches query results and loads them in memory.</li>
+<li>Data streaming: wraps query results in an enumerable. Items are lazily loaded on enumeration.</li>
+<li>Batch insertion: streams any enumerable into the db. Fine-grained control on the number of inserted objects per query in order to control performance and bandwidth.</li>
+<li>Blobbing: accepts interceptor callbacks to handle object serialization.</li>
+<li>No fancy DSL, only SQL</li>
+<li>Stateless, no caching</li>
+</ul><h1>Installation</h1>
+
+<div class="highlight"><pre><span class="n">Install-Package</span> <span class="n">MonkeyOrm</span><span class="p">.</span><span class="n">MySql</span>
+</pre></div>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">MonkeyOrm maintained by <a href="https://github.com/Sinbadsoft">Sinbadsoft</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-32892181-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+
+  </body>
+</html>
