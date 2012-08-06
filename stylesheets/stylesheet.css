@@ -267,7 +267,7 @@ Full-Width Styles
 *******************************************************************************/
 
 .outer {
-  idth: 100%;
+  width: 100%;
 }
 
 .inner {
@@ -428,4 +428,8 @@ Small Device Styles
     font-size: 11px;
   }
 
+  .hide-on-mobile
+  {
+    display: none;
+  }
 }
