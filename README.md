@@ -3,7 +3,7 @@ MonkeyOrm
 
 A small and powerful ORM that doesn't get in your way.
 
-## Save anything
+# Save anything
 POCOs:
 
 ```csharp
@@ -14,7 +14,7 @@ Anonymous:
 ```csharp
 connection.Save("Users", new { Name = "Jhon", Age = 26 });
 ```
-Hashes: [<code>IDictionary<></code>](http://msdn.microsoft.com/en-us/library/s4ys34ea), [<code>IDictionary</code>](http://msdn.microsoft.com/en-us/library/system.collections.idictionary), [<code>ExpandoObject</code>](http://msdn.microsoft.com/en-us/library/System.Dynamic.ExpandoObject.aspx) or [<code>NameValueCollection<code>](http://msdn.microsoft.com/en-us/library/System.Collections.Specialized.NameValueCollection.aspx):
+Hashes: [<code>IDictionary<></code>](http://msdn.microsoft.com/en-us/library/s4ys34ea), [<code>IDictionary</code>](http://msdn.microsoft.com/en-us/library/system.collections.idictionary), [<code>ExpandoObject</code>](http://msdn.microsoft.com/en-us/library/System.Dynamic.ExpandoObject.aspx) or [<code>NameValueCollection</code>](http://msdn.microsoft.com/en-us/library/System.Collections.Specialized.NameValueCollection.aspx):
 ```csharp
 connection.Save("Users", new Dictionary<string, object>
                                 {
@@ -31,12 +31,12 @@ connection.Save("Users", new User { Name = "Pablo", Age = 49 }, out pabloId);
 
 ##### What the heck is `connection`?
 MonkeyOrm Api consists mainly of extension methods, just like the <code>Save</code> method in the snippets above.
-In order to make things easier for client code, several types are extended with the same methods. Actually, `connection` can be an [<code>IDbConnection</code>](http://msdn.microsoft.com/en-us/library/system.data.idbconnection.aspx), an [IDbTransaction](http://msdn.microsoft.com/en-us/library/system.data.idbtransaction.aspx), 
-any connection factory function [<code>Func<IDbConnection></code>](http://msdn.microsoft.com/en-us/library/bb534960.aspx), or the MonkeyOrm defined interface [IConnectionFactory](https://github.com/Sinbadsoft/MonkeyOrm/blob/master/MonkeyOrm/IConnectionFactory.cs).
+In order to make things easier for client code, several types are extended with the same methods. Actually, `connection` can be an [<code>IDbConnection</code>](http://msdn.microsoft.com/en-us/library/system.data.idbconnection.aspx), an [<code>IDbTransaction</code>](http://msdn.microsoft.com/en-us/library/system.data.idbtransaction.aspx), 
+any connection factory function [<code>Func<IDbConnection></code>](http://msdn.microsoft.com/en-us/library/bb534960.aspx), or the MonkeyOrm defined interface [<code>IConnectionFactory</code>](https://github.com/Sinbadsoft/MonkeyOrm/blob/master/MonkeyOrm/IConnectionFactory.cs).
 
 
 
-## Read just one item
+# Read just one item
 
 ```csharp
 var joe = connection.ReadOne("Select * From Users Where @Id = id", new { id = 1 });
@@ -48,21 +48,21 @@ var stats = connection.ReadOne("Select Max(Age) As Max, Min(Age) As Min From Use
 Console.WriteLine("Max {0} - Min {1}", stats.Max, stats.Min);
 ```
 
-## Read'em All
+# Read'em All
 ```csharp
 var users = connection.ReadAll("Select * From Users Where Age > @age", new { age = 30 });
 ```
 
 Bulk fetches the whole result set in memory as a list.
 
-## Update
+# Update
 
 ```csharp
 connection.Update("Users", new { CanBuyAlchohol = true }, "Age >= @age", new { age = 21 });
 ```
 
-## Save or Update
-aka Upsert. Attempts to save the data. If a record with the same key is already present, it is updated.
+# Save or Update
+Aka Upsert. Attempts to save the provided data first. If a duplicate violation happens, an update is peformed.
 ```csharp
 connection.SaveOrUpdate("Users", new User { Name = "Anne", Age = 32 });
 ```
@@ -86,7 +86,7 @@ foreach (var user in users)
 }
 ```
 
-Easy right? Bonus point 1: the result enumerable can be enumerated multiple times if data needs to be re-streamed from the database. Bonus point 2: Linq queries can be used on the result as for any enumerable.
+Two Bonus points: (1) the result enumerable can be enumerated multiple times if data needs to be re-streamed from the database, (2) Linq queries can be used on the result as for any enumerable.
 
 ## Transactions
 ```csharp
@@ -98,9 +98,9 @@ int spockId = connection.InTransaction(autocommit: true).Do(t =>
     return id;
 });
 ```
-The transaction block can be a function of any type and return a value or be an action and return nothing. The transaction can be manually committed at any point by invoking t.Commit(). Setting `autocommit` to `true` will simply insert a call to `Commit()` at the end of the block execution, if it termniates normally.
+The transaction block can be a function of any type and return a value or be an action and return nothing. The transaction can be manually committed at any point by invoking t.Commit(). Setting `autocommit` to `true` will simply insert a call to `Commit()` after the transaction block.
 
-Isolation level can also be controlled using the `isolation` parameter:
+The transaction [isolation level](http://msdn.microsoft.com/en-us/library/system.data.isolationlevel.aspx) can be specified using the `isolation` parameter:
 ```csharp
 connection.InTransaction(true, IsolationLevel.Serializable).Do(t =>
 {
