@@ -3,6 +3,11 @@ MonkeyOrm
 
 A small and powerful ORM that doesn't get in your way.
 
+# Installation
+```powershell
+Install-Package MonkeyOrm.MySql
+```
+
 # Save anything
 POCOs:
 
@@ -67,12 +72,12 @@ Aka Upsert. Attempts to save the provided data first. If a duplicate violation h
 connection.SaveOrUpdate("Users", new User { Name = "Anne", Age = 32 });
 ```
 
-## Delete
+# Delete
 ```csharp
 connection.Delete("Users", "Name=@name", new { name = "Sauron" });
 ```
 
-## Stream Read
+# Stream Read
 Instead of bulk fetching query results in memory, they are wrapped in an enumerable for lazy evaluation. Items are loaded from the databse one at a time when the result is actually enumerated.
 
 Here is an example where results are streamed from the database to a file on disk:
@@ -88,7 +93,7 @@ foreach (var user in users)
 
 Two Bonus points: (1) the result enumerable can be enumerated multiple times if data needs to be re-streamed from the database, (2) Linq queries can be used on the result as for any enumerable.
 
-## Transactions
+# Transactions
 ```csharp
 int spockId = connection.InTransaction(autocommit: true).Do(t =>
 {
@@ -108,7 +113,7 @@ connection.InTransaction(true, IsolationLevel.Serializable).Do(t =>
     t.Update("Users", new { Age = james.Age + 15 }, "Id=@Id", new { james.Id });
 });
 ```
-## Batch insertion
+# Batch insertion
 Batch insertion enables insertion of enumerable data sets; whether this data set is held in memory or streamed from any other source (file, database, network etc.).
 
 ```csharp
@@ -132,18 +137,8 @@ Batch insertion can also be wrapped in a transaction
 connection.InTransaction().SaveBatch("Users", users);
 ```
 
-# Features Summary
-* CRUD with No code annotations; No config files and No base classes to inherit from.
-* Transactions.
-* Object slicing on insertion with white or black lists.
-* Bulk-fetching: fetches query results and loads them in memory.
-* Data streaming: wraps query results in an enumerable. Items are lazily loaded on enumeration.
-* Batch insertion: streams any enumerable into the db. Fine-grained control on the number of inserted objects per query in order to control performance and bandwidth.
-* Blobbing: accepts interceptor callbacks to handle object serialization.
-* No fancy DSL, only SQL
-* Stateless, no caching
+# Object Slicing
+todo
 
-# Installation
-```powershell
-Install-Package MonkeyOrm.MySql
-```
+# Interceptors and Blobbing
+todo
