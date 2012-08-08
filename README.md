@@ -150,15 +150,33 @@ connection.InTransaction().SaveBatch("Users", users);
 # Object Slicing
 In some contexts, the object or hash we'd like to persist in the database has more properties what we need to persist in the database. This can be for security reasons: the object is automatically created from user input; by a [model binder](http://msdn.microsoft.com/en-us/library/system.web.mvc.imodelbinder.aspx) or a similar mechanism. This can lead to security vulnerabilities. Our dear github was [hacked](http://www.theregister.co.uk/2012/03/05/github_hack/) due to a similar issue (if you want to read more on [this](http://www.diaryofaninja.com/blog/2012/03/11/what-aspnet-mvc-developers-can-learn-from-githubrsquos-security-woes) ).
 
-MonkeyOrm can filter the input object when calling `Save` by specifying either a black list or a white list on object properties.
+MonkeyOrm can filter the input object when calling `Save` (or `Update`) by specifying either a black list or a white list on object properties.
 
 ```csharp
 connection.Save("Users", user, blacklist: new[] { "IsAdmin" });
 ```
 This will prevent a hacker form forging a user input that would force `IsAdmin` column to true.
 
+```csharp
+connection.Update("Users", user, "Id=@id", new { id }, whitelist: new[] { "Name", "Age" });
+```
+Only allows `Name` and `Age`to be updated, nothing else.
+
 # Interceptors and Blobbing
-todo
+Interceptors are functions or actions you can set in order to be called back and to take control when some conditions are met. One interesting interceptor is the `UnknownValueType` that is called when the data to be inserted in a given column does not map directly to a database native type. Here is an example of this situation with the complex type being `ProfileData`:
+```csharp
+connection.Save("Users", new { Name="Joe", Age=67, new ProfileData { /* ... */ });
+```
+
+In order object, The `UnknownValueType` callback here have a chance to to "intercept" and transform the `ProfileData` complex object to a different format. A typical example would be to blob (serialize) it. Example:
+```csharp
+MonkeyOrm.Settings.Interceptors.UnknownValueType = o =>
+{
+    var writer = new StringWriter();
+    new XmlSerializer(o.GetType()).Serialize(writer, o);
+    return writer.ToString();
+};
+```
 
 # Other Commands
 todo
