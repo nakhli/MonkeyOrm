@@ -1,7 +1,7 @@
 MonkeyOrm
 =========
 
-A small and powerful ORM that doesn't get in your way.
+Small and powerful ORM for .NET
 
 # Installation
 ```powershell
@@ -17,7 +17,7 @@ connection.Save("Users", new User { Name = "Anne", Age = 31 });
 Anonymous:
 
 ```csharp
-connection.Save("Users", new { Name = "Jhon", Age = 26 });
+connection.Save("Users", new { Name = "John", Age = 26 });
 ```
 Hashes: [<code>IDictionary<></code>](http://msdn.microsoft.com/en-us/library/s4ys34ea), [<code>IDictionary</code>](http://msdn.microsoft.com/en-us/library/system.collections.idictionary), [<code>ExpandoObject</code>](http://msdn.microsoft.com/en-us/library/System.Dynamic.ExpandoObject.aspx) or [<code>NameValueCollection</code>](http://msdn.microsoft.com/en-us/library/System.Collections.Specialized.NameValueCollection.aspx):
 ```csharp
@@ -70,7 +70,7 @@ connection.Update("Users", new { CanBuyAlchohol = true }, "Age >= @age", new { a
 ```csharp
 connection.SaveOrUpdate("Users", new User { Name = "Anne", Age = 32 });
 ```
-Aka Upsert. Attempts to save first. If a duplicate violation happens, an update is performed instead.
+Aka Upsert. Attempts to save first. If the insertion violates a key or unicity constraint, an update is performed instead.
 
 # Delete
 ```csharp
@@ -78,7 +78,7 @@ connection.Delete("Users", "Name=@name", new { name = "Sauron" });
 ```
 
 # Stream Read
-Instead of bulk fetching query results in memory, they are wrapped in an enumerable for lazy evaluation. Items are loaded from the databse one at a time when the result is actually enumerated.
+Instead of bulk fetching query results in memory, they are wrapped in an enumerable for lazy evaluation. Items are loaded from the databse when the result is actually enumerated, one at a time.
 
 Here is an example where results are streamed from the database to a file on disk:
 ```csharp
@@ -91,7 +91,17 @@ foreach (var user in users)
 }
 ```
 
-Two Bonus points: (1) the result enumerable can be enumerated multiple times if data needs to be re-streamed from the database, (2) Linq queries can be used on the result as for any enumerable.
+Two Bonus Points: (1) the result enumerable can be enumerated multiple times if data needs to be re-streamed from the database (the query will be executed again), (2) Linq queries can be used on the result as for any enumerable.
+
+`ReadStream` has an overload that, instead of returning the result as enumerabke, accepts function of boolean that is called for each result item until it returns `false`. The snippet above would be equivalent to:
+```csharp
+using(var file = new StreamWriter(Path.GetTempFileName()))
+connection.ReadStream("Select * From Users", user => 
+{
+    file.WriteLine("{0} - {1}", user.Name, user.Age);
+    return true;
+});
+```
 
 # Transactions
 ```csharp
@@ -127,7 +137,7 @@ connection.SaveBatch("Users", new[]
 
 By default, one object at a time is read from the provided set and inserted in the database. In order to tune performance/bandwidth more elements can be loaded and inserted at once through the `chunkSize` parameter.
 
-In the following snippet, 100 objects are loaded and inserted at a time from the provided enumerable.
+In the following snippet, 100 objects are loaded and inserted at a time -- in the same query -- from the provided enumerable.
 ```csharp
 connection.SaveBatch("Users", LoadDataFromRemoteSource(), 100);
 ```
@@ -138,7 +148,17 @@ connection.InTransaction().SaveBatch("Users", users);
 ```
 
 # Object Slicing
-todo
+In some contexts, the object or hash we'd like to persist in the database has more properties what we need to persist in the database. This can be for security reasons: the object is automatically created from user input; by a [model binder](http://msdn.microsoft.com/en-us/library/system.web.mvc.imodelbinder.aspx) or a similar mechanism. This can lead to security vulnerabilities. Our dear github was [hacked](http://www.theregister.co.uk/2012/03/05/github_hack/) due to a similar issue (if you want to read more on [this](http://www.diaryofaninja.com/blog/2012/03/11/what-aspnet-mvc-developers-can-learn-from-githubrsquos-security-woes) ).
+
+MonkeyOrm can filter the input object when calling `Save` by specifying either a black list or a white list.
+
+
 
 # Interceptors and Blobbing
 todo
+
+# Related Projects
+* [Massive](https://github.com/robconery/massive)
+* [PetaPoco](http://www.toptensoftware.com/petapoco/)
+* [Dappler](http://code.google.com/p/dapper-dot-net/)
+* [Simple.Data](https://github.com/markrendle/Simple.Data)
