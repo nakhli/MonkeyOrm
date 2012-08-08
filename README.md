@@ -148,14 +148,14 @@ connection.InTransaction().SaveBatch("Users", users);
 ```
 
 # Object Slicing
-In some contexts, the object or hash we'd like to persist in the database has more properties what we need to persist in the database. This can be for security reasons: the object is automatically created from user input; by a [model binder](http://msdn.microsoft.com/en-us/library/system.web.mvc.imodelbinder.aspx) or a similar mechanism. This can lead to security vulnerabilities. Our dear github was [hacked](http://www.theregister.co.uk/2012/03/05/github_hack/) due to a similar issue (if you want to read more on [this](http://www.diaryofaninja.com/blog/2012/03/11/what-aspnet-mvc-developers-can-learn-from-githubrsquos-security-woes) ).
+In some contexts, the object or hash we'd like to persist in the database has more properties than needed. This can be for security reasons: the object is automatically created from user input; by a [model binder](http://msdn.microsoft.com/en-us/library/system.web.mvc.imodelbinder.aspx) or something similar. This can lead to security vulnerabilities. Our dear github was [hacked](http://www.theregister.co.uk/2012/03/05/github_hack/) due to a similar issue (if you want to read [more](http://www.diaryofaninja.com/blog/2012/03/11/what-aspnet-mvc-developers-can-learn-from-githubrsquos-security-woes) ).
 
-MonkeyOrm can filter the input object when calling `Save` (or `Update`) by specifying either a black list or a white list on object properties.
+MonkeyOrm can filter the input object when calling `Save` or `Update` by specifying either a black list or a white list on object properties.
 
 ```csharp
 connection.Save("Users", user, blacklist: new[] { "IsAdmin" });
 ```
-This will prevent a hacker form forging a user input that would force `IsAdmin` column to true.
+This will prevent a hacker form forging a user input that would force `IsAdmin` column to `true`.
 
 ```csharp
 connection.Update("Users", user, "Id=@id", new { id }, whitelist: new[] { "Name", "Age" });
