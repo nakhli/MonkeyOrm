@@ -44,7 +44,7 @@ any connection factory function [`Func<IDbConnection>`](http://msdn.microsoft.co
 # Read just one item
 
 ```csharp
-var joe = connection.ReadOne("Select * From Users Where @Id = id", new { id = 1 });
+var joe = connection.ReadOne("Select * From Users Where Name = @name", new { name = "Joe" });
 ```
 Reads only the first element, if any, from the result set. You can also read computed data:
 
@@ -67,10 +67,10 @@ connection.Update("Users", new { CanBuyAlchohol = true }, "Age >= @age", new { a
 ```
 
 # Save or Update
-Aka Upsert. Attempts to save the provided data first. If a duplicate violation happens, an update is peformed.
 ```csharp
 connection.SaveOrUpdate("Users", new User { Name = "Anne", Age = 32 });
 ```
+Aka Upsert. Attempts to save first. If a duplicate violation happens, an update is performed instead.
 
 # Delete
 ```csharp
