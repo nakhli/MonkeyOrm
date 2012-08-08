@@ -93,7 +93,7 @@ foreach (var user in users)
 
 Two Bonus Points: (1) the result enumerable can be enumerated multiple times if data needs to be re-streamed from the database (the query will be executed again), (2) Linq queries can be used on the result as for any enumerable.
 
-`ReadStream` has an overload that, instead of returning the result as enumerabke, accepts function of boolean that is called for each result item until it returns `false`. The snippet above would be equivalent to:
+In addition, `ReadStream` has an overload that, instead of returning the result as enumerabke, accepts function of boolean that is called for each result item until it returns `false`. The snippet above would be equivalent to:
 ```csharp
 using(var file = new StreamWriter(Path.GetTempFileName()))
 connection.ReadStream("Select * From Users", user => 
@@ -137,7 +137,7 @@ connection.SaveBatch("Users", new[]
 
 By default, one object at a time is read from the provided set and inserted in the database. In order to tune performance/bandwidth more elements can be loaded and inserted at once through the `chunkSize` parameter.
 
-In the following snippet, 100 objects are loaded and inserted at a time -- in the same query -- from the provided enumerable.
+In the following snippet, 100 objects are loaded and inserted at a time -- in the same query -- from the provided enumerable to the database.
 ```csharp
 connection.SaveBatch("Users", LoadDataFromRemoteSource(), 100);
 ```
@@ -150,11 +150,17 @@ connection.InTransaction().SaveBatch("Users", users);
 # Object Slicing
 In some contexts, the object or hash we'd like to persist in the database has more properties what we need to persist in the database. This can be for security reasons: the object is automatically created from user input; by a [model binder](http://msdn.microsoft.com/en-us/library/system.web.mvc.imodelbinder.aspx) or a similar mechanism. This can lead to security vulnerabilities. Our dear github was [hacked](http://www.theregister.co.uk/2012/03/05/github_hack/) due to a similar issue (if you want to read more on [this](http://www.diaryofaninja.com/blog/2012/03/11/what-aspnet-mvc-developers-can-learn-from-githubrsquos-security-woes) ).
 
-MonkeyOrm can filter the input object when calling `Save` by specifying either a black list or a white list.
+MonkeyOrm can filter the input object when calling `Save` by specifying either a black list or a white list on object properties.
 
-
+```csharp
+connection.Save("Users", user, blacklist: new[] { "IsAdmin" });
+```
+This will prevent a hacker form forging a user input that would force `IsAdmin` column to true.
 
 # Interceptors and Blobbing
+todo
+
+# Other Commands
 todo
 
 # Related Projects
