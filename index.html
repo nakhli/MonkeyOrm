@@ -225,7 +225,7 @@ any connection factory function <a href="http://msdn.microsoft.com/en-us/library
 
 <p>The property <code>Profile</code> holds an instance of POCO type <code>ProfileData</code>. This type can't be directly inserted into the column <code>Profile</code> of the <code>Users</code> table as it is.</p>
 
-<p>In this situation, MonkeyOrm calls the <code>UnknownValueType</code> callback in order the give clint code a chance to "intercept" the non-trivial type and transform it to something the database can handle. A typical example would be to blob (serialize) the <code>ProfileData</code> instance. Here is an example of a xml blobber interceptor:</p>
+<p>In this situation, MonkeyOrm calls the <code>UnknownValueType</code> callback in order the give client code a chance to "intercept" the non-trivial type and transform it to something the database can handle. A typical example would be to blob (serialize) the <code>ProfileData</code> instance. Here is an example of a xml blobber interceptor:</p>
 
 <div class="highlight"><pre><span class="n">MonkeyOrm</span><span class="p">.</span><span class="n">Settings</span><span class="p">.</span><span class="n">Interceptors</span><span class="p">.</span><span class="n">UnknownValueType</span> <span class="p">=</span> <span class="n">o</span> <span class="p">=&gt;</span>
 <span class="p">{</span>
