@@ -4,6 +4,7 @@ MonkeyOrm
 Small and powerful ORM for .NET
 
 # Installation
+A [nuget](http://nuget.org/packages/MonkeyOrm.MySql) is availble, just run the following command in the [Package Manager Console](http://docs.nuget.org/docs/start-here/using-the-package-manager-console):
 ```powershell
 Install-Package MonkeyOrm.MySql
 ```
@@ -93,7 +94,7 @@ foreach (var user in users)
 
 Two Bonus Points: (1) the result enumerable can be enumerated multiple times if data needs to be re-streamed from the database (the query will be executed again), (2) Linq queries can be used on the result as for any enumerable.
 
-In addition, `ReadStream` has an overload that, instead of returning the result as enumerabke, accepts function of boolean that is called for each result item until it returns `false`. The snippet above would be equivalent to:
+`ReadStream` has also an overload that, instead of returning the result as enumerable, it takes a function that it calls for each result item until it returns `false`. The snippet above would be equivalent to:
 ```csharp
 using(var file = new StreamWriter(Path.GetTempFileName()))
 connection.ReadStream("Select * From Users", user => 
@@ -113,7 +114,7 @@ int spockId = connection.InTransaction(autocommit: true).Do(t =>
     return id;
 });
 ```
-The transaction block can be a function of any type and return a value or be an action and return nothing. The transaction can be manually committed at any point by invoking t.Commit(). Setting `autocommit` to `true` will simply insert a call to `Commit()` after the transaction block.
+The transaction block can be a function or an action. The return value, if any, will be returned back to client code. The transaction can be manually committed at any point by invoking `t.Commit()`. Setting `autocommit` parameter to `true` will simply insert a call to `Commit()` after the transaction block.
 
 The transaction [isolation level](http://msdn.microsoft.com/en-us/library/system.data.isolationlevel.aspx) can be specified using the `isolation` parameter:
 ```csharp
