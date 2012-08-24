@@ -164,12 +164,13 @@ connection.Update("Users", user, "Id=@id", new { id }, whitelist: new[] { "Name"
 Only allows `Name` and `Age`to be updated, nothing else.
 
 # Interceptors and Blobbing
-Interceptors are functions you can set in order to take control on how the data is processed by MonkeyOrm. One interesting interceptor is the `UnknownValueType` interceptor. It is called when the data to be inserted in a given column does not map directly to a database native type. Here is an example with the property `Profile` holding an instance of POCO type `ProfileData` that can't be directly inserted into the column `Profile` of the `Users` table:
+Interceptors are functions you can set in order to take control on how the data is processed by MonkeyOrm. One interesting interceptor is the `UnknownValueType` interceptor. It is called when the data to be inserted in a given column does not map directly to a database native type. Consider the following example:
 ```csharp
 connection.Save("Users", new { Name="Joe", Age=67, Profile=new ProfileData { /* ... */ });
 ```
+The property `Profile` holds an instance of POCO type `ProfileData`. This type can't be directly inserted into the column `Profile` of the `Users` table as it is.
 
-Here, MonkeyOrm calls the `UnknownValueType` callback in order the give clint code a chance to "intercept" the non-trivial type and transform it. A typical example would be to blob (serialize) the `ProfileData` instance:
+In this situation, MonkeyOrm calls the `UnknownValueType` callback in order the give clint code a chance to "intercept" the non-trivial type and transform it to something the database can handle. A typical example would be to blob (serialize) the `ProfileData` instance. Here is an example of a xml blobber interceptor:
 ```csharp
 MonkeyOrm.Settings.Interceptors.UnknownValueType = o =>
 {
@@ -179,8 +180,15 @@ MonkeyOrm.Settings.Interceptors.UnknownValueType = o =>
 };
 ```
 
-# Other Commands
-todo: `Execute`examples
+# Custom non Query Commands
+`Execute` runs any valid SQL code:
+```csharp
+connection.Execute("Truncate Table Users");
+```
+It can also run commands with parameters:
+```csharp
+connection.Execute("Insert Into Users (Name, Age) Values (@Name, @Age)", new { Name = "Philip", Age = 55 });
+```
 
 # Related Projects
 * [Massive](https://github.com/robconery/massive)
