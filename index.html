@@ -3,7 +3,7 @@
 
   <head>
     <meta charset='utf-8' />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=0.8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1" />
     <meta name="description" content="MonkeyOrm : A small and powerful ORM that doesn't get in your way." />
 
@@ -18,8 +18,10 @@
     <div id="header_wrap" class="outer">
         <header class="inner">
           <a id="forkme_banner" href="https://github.com/Sinbadsoft/MonkeyOrm">View on GitHub</a>
-          <h1 id="project_title">Monkey<span style="color:darkred;">Orm</span></h1>
-          <h2 id="project_tagline">A small and powerful ORM that doesn't get in your way.</h2>
+		  <div id="project_header">
+			  <h1 id="project_title">Monkey<span style="color:darkred;">Orm</span></h1>
+			  <h2 id="project_tagline">Small Powerful ORM for .NET</h2>
+		  </div>
 <!-- AddThis Button BEGIN -->
 <div class="addthis_toolbox addthis_default_style">
 <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
@@ -35,13 +37,18 @@
 
     <!-- MAIN CONTENT -->
 <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-<h1>Installation</h1>
+<section id="main_content" class="inner">
+<!-- Auto generated content BEGIN-->
+<h1>
+<a name="installation" class="anchor" href="#installation"><span class="mini-icon mini-icon-link"></span></a>Installation</h1>
+
+<p>A <a href="http://nuget.org/packages/MonkeyOrm.MySql">nuget</a> is availble, just run the following command in the <a href="http://docs.nuget.org/docs/start-here/using-the-package-manager-console">Package Manager Console</a>:</p>
 
 <div class="highlight"><pre><span class="n">Install-Package</span> <span class="n">MonkeyOrm</span><span class="p">.</span><span class="n">MySql</span>
 </pre></div>
 
-<h1>Save anything</h1>
+<h1>
+<a name="save-anything" class="anchor" href="#save-anything"><span class="mini-icon mini-icon-link"></span></a>Save anything</h1>
 
 <p>POCOs:</p>
 
@@ -50,10 +57,10 @@
 
 <p>Anonymous:</p>
 
-<div class="highlight"><pre><span class="n">connection</span><span class="p">.</span><span class="n">Save</span><span class="p">(</span><span class="s">"Users"</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">Name</span> <span class="p">=</span> <span class="s">"Jhon"</span><span class="p">,</span> <span class="n">Age</span> <span class="p">=</span> <span class="m">26</span> <span class="p">});</span>
+<div class="highlight"><pre><span class="n">connection</span><span class="p">.</span><span class="n">Save</span><span class="p">(</span><span class="s">"Users"</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">Name</span> <span class="p">=</span> <span class="s">"John"</span><span class="p">,</span> <span class="n">Age</span> <span class="p">=</span> <span class="m">26</span> <span class="p">});</span>
 </pre></div>
 
-<p>Hashes: <a href="http://msdn.microsoft.com/en-us/library/s4ys34ea" ><code>IDictionary&lt;&gt;</code></a>, <a href="http://msdn.microsoft.com/en-us/library/system.collections.idictionary" ><code>IDictionary</code></a>, <a href="http://msdn.microsoft.com/en-us/library/System.Dynamic.ExpandoObject.aspx" ><code>ExpandoObject</code></a> or <a href="http://msdn.microsoft.com/en-us/library/System.Collections.Specialized.NameValueCollection.aspx" ><code>NameValueCollection</code></a>:</p>
+<p>Hashes: <a href="http://msdn.microsoft.com/en-us/library/s4ys34ea"><code>IDictionary&lt;&gt;</code></a>, <a href="http://msdn.microsoft.com/en-us/library/system.collections.idictionary"><code>IDictionary</code></a>, <a href="http://msdn.microsoft.com/en-us/library/System.Dynamic.ExpandoObject.aspx"><code>ExpandoObject</code></a> or <a href="http://msdn.microsoft.com/en-us/library/System.Collections.Specialized.NameValueCollection.aspx"><code>NameValueCollection</code></a>:</p>
 
 <div class="highlight"><pre><span class="n">connection</span><span class="p">.</span><span class="n">Save</span><span class="p">(</span><span class="s">"Users"</span><span class="p">,</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">object</span><span class="p">&gt;</span>
                                 <span class="p">{</span>
@@ -68,15 +75,17 @@
 <span class="n">connection</span><span class="p">.</span><span class="n">Save</span><span class="p">(</span><span class="s">"Users"</span><span class="p">,</span> <span class="k">new</span> <span class="n">User</span> <span class="p">{</span> <span class="n">Name</span> <span class="p">=</span> <span class="s">"Pablo"</span><span class="p">,</span> <span class="n">Age</span> <span class="p">=</span> <span class="m">49</span> <span class="p">},</span> <span class="k">out</span> <span class="n">pabloId</span><span class="p">);</span>
 </pre></div>
 
-<h5>What the heck is <code>connection</code>?</h5>
+<h5>
+<a name="what-the-heck-is-connection" class="anchor" href="#what-the-heck-is-connection"><span class="mini-icon mini-icon-link"></span></a>What the heck is <code>connection</code>?</h5>
 
 <p>MonkeyOrm Api consists mainly of extension methods, just like the <code>Save</code> method in the snippets above.
-In order to make things easier for client code, several types are extended with the same methods. Actually, <code>connection</code> can be an <a href="http://msdn.microsoft.com/en-us/library/system.data.idbconnection.aspx" ><code>IDbConnection</code></a>, an <a href="http://msdn.microsoft.com/en-us/library/system.data.idbtransaction.aspx" ><code>IDbTransaction</code></a>, 
-any connection factory function <a href="http://msdn.microsoft.com/en-us/library/bb534960.aspx" ><code>Func<IDbConnection></code></a>, or the MonkeyOrm defined interface <a href="https://github.com/Sinbadsoft/MonkeyOrm/blob/master/MonkeyOrm/IConnectionFactory.cs" ><code>IConnectionFactory</code></a>.</p>
+In order to make things easier for client code, several types are extended with the same methods. Actually, <code>connection</code> can be an <a href="http://msdn.microsoft.com/en-us/library/system.data.idbconnection.aspx"><code>IDbConnection</code></a>, an <a href="http://msdn.microsoft.com/en-us/library/system.data.idbtransaction.aspx"><code>IDbTransaction</code></a>, 
+any connection factory function <a href="http://msdn.microsoft.com/en-us/library/bb534960.aspx"><code>Func&lt;IDbConnection&gt;</code></a>, or the MonkeyOrm defined interface <a href="https://github.com/Sinbadsoft/MonkeyOrm/blob/master/MonkeyOrm/IConnectionFactory.cs"><code>IConnectionFactory</code></a>.</p>
 
-<h1>Read just one item</h1>
+<h1>
+<a name="read-just-one-item" class="anchor" href="#read-just-one-item"><span class="mini-icon mini-icon-link"></span></a>Read just one item</h1>
 
-<div class="highlight"><pre><span class="kt">var</span> <span class="n">joe</span> <span class="p">=</span> <span class="n">connection</span><span class="p">.</span><span class="n">ReadOne</span><span class="p">(</span><span class="s">"Select * From Users Where @Id = id"</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">id</span> <span class="p">=</span> <span class="m">1</span> <span class="p">});</span>
+<div class="highlight"><pre><span class="kt">var</span> <span class="n">joe</span> <span class="p">=</span> <span class="n">connection</span><span class="p">.</span><span class="n">ReadOne</span><span class="p">(</span><span class="s">"Select * From Users Where Name = @name"</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">name</span> <span class="p">=</span> <span class="s">"Joe"</span> <span class="p">});</span>
 </pre></div>
 
 <p>Reads only the first element, if any, from the result set. You can also read computed data:</p>
@@ -85,35 +94,38 @@ any connection factory function <a href="http://msdn.microsoft.com/en-us/library
 <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"Max {0} - Min {1}"</span><span class="p">,</span> <span class="n">stats</span><span class="p">.</span><span class="n">Max</span><span class="p">,</span> <span class="n">stats</span><span class="p">.</span><span class="n">Min</span><span class="p">);</span>
 </pre></div>
 
-<h1>Read'em All</h1>
+<h1>
+<a name="readem-all" class="anchor" href="#readem-all"><span class="mini-icon mini-icon-link"></span></a>Read'em All</h1>
 
 <div class="highlight"><pre><span class="kt">var</span> <span class="n">users</span> <span class="p">=</span> <span class="n">connection</span><span class="p">.</span><span class="n">ReadAll</span><span class="p">(</span><span class="s">"Select * From Users Where Age &gt; @age"</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">age</span> <span class="p">=</span> <span class="m">30</span> <span class="p">});</span>
 </pre></div>
 
 <p>Bulk fetches the whole result set in memory as a list.</p>
 
-<h1>Update</h1>
+<h1>
+<a name="update" class="anchor" href="#update"><span class="mini-icon mini-icon-link"></span></a>Update</h1>
 
 <div class="highlight"><pre><span class="n">connection</span><span class="p">.</span><span class="n">Update</span><span class="p">(</span><span class="s">"Users"</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">CanBuyAlchohol</span> <span class="p">=</span> <span class="k">true</span> <span class="p">},</span> <span class="s">"Age &gt;= @age"</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">age</span> <span class="p">=</span> <span class="m">21</span> <span class="p">});</span>
 </pre></div>
 
 <h1>
-<a name="save-or-update" class="anchor" href="#save-or-update" ><span class="mini-icon mini-icon-link"></span></a>Save or Update</h1>
-
-<p>Aka Upsert. Attempts to save the provided data first. If a duplicate violation happens, an update is peformed.</p>
+<a name="save-or-update" class="anchor" href="#save-or-update"><span class="mini-icon mini-icon-link"></span></a>Save or Update</h1>
 
 <div class="highlight"><pre><span class="n">connection</span><span class="p">.</span><span class="n">SaveOrUpdate</span><span class="p">(</span><span class="s">"Users"</span><span class="p">,</span> <span class="k">new</span> <span class="n">User</span> <span class="p">{</span> <span class="n">Name</span> <span class="p">=</span> <span class="s">"Anne"</span><span class="p">,</span> <span class="n">Age</span> <span class="p">=</span> <span class="m">32</span> <span class="p">});</span>
 </pre></div>
 
+<p>Aka Upsert. Attempts to save first. If the insertion violates a key or unicity constraint, an update is performed instead.</p>
+
 <h1>
-<a name="delete" class="anchor" href="#delete" ><span class="mini-icon mini-icon-link"></span></a>Delete</h1>
+<a name="delete" class="anchor" href="#delete"><span class="mini-icon mini-icon-link"></span></a>Delete</h1>
 
 <div class="highlight"><pre><span class="n">connection</span><span class="p">.</span><span class="n">Delete</span><span class="p">(</span><span class="s">"Users"</span><span class="p">,</span> <span class="s">"Name=@name"</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">name</span> <span class="p">=</span> <span class="s">"Sauron"</span> <span class="p">});</span>
 </pre></div>
 
-<h1>Stream Read</h1>
+<h1>
+<a name="stream-read" class="anchor" href="#stream-read"><span class="mini-icon mini-icon-link"></span></a>Stream Read</h1>
 
-<p>Instead of bulk fetching query results in memory, they are wrapped in an enumerable for lazy evaluation. Items are loaded from the databse one at a time when the result is actually enumerated.</p>
+<p>Instead of bulk fetching query results in memory, they are wrapped in an enumerable for lazy evaluation. Items are loaded from the databse when the result is actually enumerated, one at a time.</p>
 
 <p>Here is an example where results are streamed from the database to a file on disk:</p>
 
@@ -126,9 +138,20 @@ any connection factory function <a href="http://msdn.microsoft.com/en-us/library
 <span class="p">}</span>
 </pre></div>
 
-<p>Two Bonus points: (1) the result enumerable can be enumerated multiple times if data needs to be re-streamed from the database, (2) Linq queries can be used on the result as for any enumerable.</p>
+<p>Two Bonus Points: (1) the result enumerable can be enumerated multiple times if data needs to be re-streamed from the database (the query will be executed again), (2) Linq queries can be used on the result as for any enumerable.</p>
 
-<h1>Transactions</h1>
+<p><code>ReadStream</code> has also an overload that, instead of returning the result as enumerable, it takes a function that it calls for each result item until it returns <code>false</code>. The snippet above would be equivalent to:</p>
+
+<div class="highlight"><pre><span class="n">using</span><span class="p">(</span><span class="kt">var</span> <span class="n">file</span> <span class="p">=</span> <span class="k">new</span> <span class="n">StreamWriter</span><span class="p">(</span><span class="n">Path</span><span class="p">.</span><span class="n">GetTempFileName</span><span class="p">()))</span>
+<span class="n">connection</span><span class="p">.</span><span class="n">ReadStream</span><span class="p">(</span><span class="s">"Select * From Users"</span><span class="p">,</span> <span class="n">user</span> <span class="p">=&gt;</span> 
+<span class="p">{</span>
+    <span class="n">file</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"{0} - {1}"</span><span class="p">,</span> <span class="n">user</span><span class="p">.</span><span class="n">Name</span><span class="p">,</span> <span class="n">user</span><span class="p">.</span><span class="n">Age</span><span class="p">);</span>
+    <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
+<span class="p">});</span>
+</pre></div>
+
+<h1>
+<a name="transactions" class="anchor" href="#transactions"><span class="mini-icon mini-icon-link"></span></a>Transactions</h1>
 
 <div class="highlight"><pre><span class="kt">int</span> <span class="n">spockId</span> <span class="p">=</span> <span class="n">connection</span><span class="p">.</span><span class="n">InTransaction</span><span class="p">(</span><span class="n">autocommit</span><span class="p">:</span> <span class="k">true</span><span class="p">).</span><span class="n">Do</span><span class="p">(</span><span class="n">t</span> <span class="p">=&gt;</span>
 <span class="p">{</span>
@@ -139,9 +162,9 @@ any connection factory function <a href="http://msdn.microsoft.com/en-us/library
 <span class="p">});</span>
 </pre></div>
 
-<p>The transaction block can be a function of any type and return a value or be an action and return nothing. The transaction can be manually committed at any point by invoking t.Commit(). Setting <code>autocommit</code> to <code>true</code> will simply insert a call to <code>Commit()</code> after the transaction block.</p>
+<p>The transaction block can be a function or an action. The return value, if any, will be returned back to client code. The transaction can be manually committed at any point by invoking <code>t.Commit()</code>. Setting <code>autocommit</code> parameter to <code>true</code> will simply insert a call to <code>Commit()</code> after the transaction block.</p>
 
-<p>The transaction <a href="http://msdn.microsoft.com/en-us/library/system.data.isolationlevel.aspx" >isolation level</a> can be specified using the <code>isolation</code> parameter:</p>
+<p>The transaction <a href="http://msdn.microsoft.com/en-us/library/system.data.isolationlevel.aspx">isolation level</a> can be specified using the <code>isolation</code> parameter:</p>
 
 <div class="highlight"><pre><span class="n">connection</span><span class="p">.</span><span class="n">InTransaction</span><span class="p">(</span><span class="k">true</span><span class="p">,</span> <span class="n">IsolationLevel</span><span class="p">.</span><span class="n">Serializable</span><span class="p">).</span><span class="n">Do</span><span class="p">(</span><span class="n">t</span> <span class="p">=&gt;</span>
 <span class="p">{</span>
@@ -150,7 +173,8 @@ any connection factory function <a href="http://msdn.microsoft.com/en-us/library
 <span class="p">});</span>
 </pre></div>
 
-<h1>Batch insertion</h1>
+<h1>
+<a name="batch-insertion" class="anchor" href="#batch-insertion"><span class="mini-icon mini-icon-link"></span></a>Batch insertion</h1>
 
 <p>Batch insertion enables insertion of enumerable data sets; whether this data set is held in memory or streamed from any other source (file, database, network etc.).</p>
 
@@ -164,7 +188,7 @@ any connection factory function <a href="http://msdn.microsoft.com/en-us/library
 
 <p>By default, one object at a time is read from the provided set and inserted in the database. In order to tune performance/bandwidth more elements can be loaded and inserted at once through the <code>chunkSize</code> parameter.</p>
 
-<p>In the following snippet, 100 objects are loaded and inserted at a time from the provided enumerable.</p>
+<p>In the following snippet, 100 objects are loaded and inserted at a time -- in the same query -- from the provided enumerable to the database.</p>
 
 <div class="highlight"><pre><span class="n">connection</span><span class="p">.</span><span class="n">SaveBatch</span><span class="p">(</span><span class="s">"Users"</span><span class="p">,</span> <span class="n">LoadDataFromRemoteSource</span><span class="p">(),</span> <span class="m">100</span><span class="p">);</span>
 </pre></div>
@@ -174,20 +198,73 @@ any connection factory function <a href="http://msdn.microsoft.com/en-us/library
 <div class="highlight"><pre><span class="n">connection</span><span class="p">.</span><span class="n">InTransaction</span><span class="p">().</span><span class="n">SaveBatch</span><span class="p">(</span><span class="s">"Users"</span><span class="p">,</span> <span class="n">users</span><span class="p">);</span>
 </pre></div>
 
-<h1>Object Slicing</h1>
+<h1>
+<a name="object-slicing" class="anchor" href="#object-slicing"><span class="mini-icon mini-icon-link"></span></a>Object Slicing</h1>
 
-<p>todo</p>
+<p>In some contexts, the object (or hash) to be saved in the database has more properties than what should be persisted. This can be for security reasons: the object was automatically created from user input; for instance by a <a href="http://msdn.microsoft.com/en-us/library/system.web.mvc.imodelbinder.aspx">model binder</a> or a similar mechanism. This situation can lead to security vulnerabilities. The github site was <a href="http://www.theregister.co.uk/2012/03/05/github_hack/">hacked</a> due to a similar issue (if you want to read <a href="http://www.diaryofaninja.com/blog/2012/03/11/what-aspnet-mvc-developers-can-learn-from-githubrsquos-security-woes">more</a> on the issue).</p>
 
-<h1>Interceptors and Blobbing</h1>
+<p>MonkeyOrm can slice the input object when calling <code>Save</code> or <code>Update</code> by applying either a black list or a white list filter on object properties.</p>
 
-<p>todo</p>    
+<div class="highlight"><pre><span class="n">connection</span><span class="p">.</span><span class="n">Save</span><span class="p">(</span><span class="s">"Users"</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">blacklist</span><span class="p">:</span> <span class="k">new</span><span class="p">[]</span> <span class="p">{</span> <span class="s">"IsAdmin"</span> <span class="p">});</span>
+</pre></div>
+
+<p>This will prevent a hacker form forging a user input that would force <code>IsAdmin</code> column to <code>true</code>.</p>
+
+<div class="highlight"><pre><span class="n">connection</span><span class="p">.</span><span class="n">Update</span><span class="p">(</span><span class="s">"Users"</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="s">"Id=@id"</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">id</span> <span class="p">},</span> <span class="n">whitelist</span><span class="p">:</span> <span class="k">new</span><span class="p">[]</span> <span class="p">{</span> <span class="s">"Name"</span><span class="p">,</span> <span class="s">"Age"</span> <span class="p">});</span>
+</pre></div>
+
+<p>Only allows <code>Name</code> and <code>Age</code>to be updated, nothing else.</p>
+
+<h1>
+<a name="interceptors-and-blobbing" class="anchor" href="#interceptors-and-blobbing"><span class="mini-icon mini-icon-link"></span></a>Interceptors and Blobbing</h1>
+
+<p>Interceptors are functions you can set in order to take control on how the data is processed by MonkeyOrm. One interesting interceptor is the <code>UnknownValueType</code> interceptor. It is called when the data to be inserted in a given column does not map directly to a database native type. Consider the following example:</p>
+
+<div class="highlight"><pre><span class="n">connection</span><span class="p">.</span><span class="n">Save</span><span class="p">(</span><span class="s">"Users"</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">Name</span><span class="p">=</span><span class="s">"Joe"</span><span class="p">,</span> <span class="n">Age</span><span class="p">=</span><span class="m">67</span><span class="p">,</span> <span class="n">Profile</span><span class="p">=</span><span class="k">new</span> <span class="n">ProfileData</span> <span class="p">{</span> <span class="cm">/* ... */</span> <span class="p">});</span>
+</pre></div>
+
+<p>The property <code>Profile</code> holds an instance of POCO type <code>ProfileData</code>. This type can't be directly inserted into the column <code>Profile</code> of the <code>Users</code> table as it is.</p>
+
+<p>In this situation, MonkeyOrm calls the <code>UnknownValueType</code> callback in order the give clint code a chance to "intercept" the non-trivial type and transform it to something the database can handle. A typical example would be to blob (serialize) the <code>ProfileData</code> instance. Here is an example of a xml blobber interceptor:</p>
+
+<div class="highlight"><pre><span class="n">MonkeyOrm</span><span class="p">.</span><span class="n">Settings</span><span class="p">.</span><span class="n">Interceptors</span><span class="p">.</span><span class="n">UnknownValueType</span> <span class="p">=</span> <span class="n">o</span> <span class="p">=&gt;</span>
+<span class="p">{</span>
+    <span class="kt">var</span> <span class="n">writer</span> <span class="p">=</span> <span class="k">new</span> <span class="n">StringWriter</span><span class="p">();</span>
+    <span class="k">new</span> <span class="nf">XmlSerializer</span><span class="p">(</span><span class="n">o</span><span class="p">.</span><span class="n">GetType</span><span class="p">()).</span><span class="n">Serialize</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">o</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">writer</span><span class="p">.</span><span class="n">ToString</span><span class="p">();</span>
+<span class="p">};</span>
+</pre></div>
+
+<h1>
+<a name="custom-non-query-commands" class="anchor" href="#custom-non-query-commands"><span class="mini-icon mini-icon-link"></span></a>Custom non Query Commands</h1>
+
+<p><code>Execute</code> runs any valid SQL code:</p>
+
+<div class="highlight"><pre><span class="n">connection</span><span class="p">.</span><span class="n">Execute</span><span class="p">(</span><span class="s">"Truncate Table Users"</span><span class="p">);</span>
+</pre></div>
+
+<p>It can also run commands with parameters:</p>
+
+<div class="highlight"><pre><span class="n">connection</span><span class="p">.</span><span class="n">Execute</span><span class="p">(</span>
+    <span class="s">"Insert Into Users (Name, Age) Values (@Name, @Age)"</span><span class="p">,</span>
+    <span class="k">new</span> <span class="p">{</span> <span class="n">Name</span> <span class="p">=</span> <span class="s">"Philip"</span><span class="p">,</span> <span class="n">Age</span> <span class="p">=</span> <span class="m">55</span> <span class="p">});</span>
+</pre></div>
+<h1>
+<a name="related-projects" class="anchor" href="#related-projects"><span class="mini-icon mini-icon-link"></span></a>Related Projects</h1>
+
+<ul>
+<li><a href="https://github.com/robconery/massive">Massive</a></li>
+<li><a href="http://www.toptensoftware.com/petapoco/">PetaPoco</a></li>
+<li><a href="http://code.google.com/p/dapper-dot-net/">Dappler</a></li>
+<li><a href="https://github.com/markrendle/Simple.Data">Simple.Data</a></li>
+</ul>
+<!-- Auto generated content End-->
 </section>
     </div>
     <!-- FOOTER  -->
     <div id="footer_wrap" class="outer">
       <footer class="inner">
         <p class="copyright">MonkeyOrm maintained by <a href="https://github.com/Sinbadsoft">Sinbadsoft</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
       </footer>
     </div>
 

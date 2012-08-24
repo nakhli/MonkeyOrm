@@ -294,15 +294,17 @@ Full-Width Styles
   padding: 50px 10px 30px 10px;
 }
 
+#project_header {
+  background: url('../images/monkeyorm-logo.jpg') left center no-repeat;
+  padding-left: 190px;
+}
+
 #project_title {
   margin: 0;
   color: black;
   font-size: 72px;
   font-weight: 700;
   text-shadow: #B6B6B6 1px 0px 1px;
-  background: url('../images/monkeyorm-logo.jpg') left center no-repeat;
-  padding-left: 190px;
-  height: 120px;
 }
 
 #project_tagline {
@@ -403,13 +405,20 @@ Small Device Styles
     max-width: 480px;
   }
 
+  #project_header {
+	background: url('../images/monkeyorm-logo.jpg') center top no-repeat;
+	padding: 120px 0 0 0;
+  }
+  
   #project_title {
-  font-size: 48px;
-  background: url('../images/monkeyorm-logo.jpg') center top no-repeat;
-  padding: 120px 0 0 0;
-  height: auto;
-  text-align: center;
-}
+	font-size: 48px;
+	text-align: center;
+  }
+  
+  #project_tagline {
+	font-size: 20px;
+	text-align: center;
+  }
 
   h1 {
     font-size: 28px;
