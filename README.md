@@ -1,7 +1,7 @@
 MonkeyOrm
 =========
 
-Small and powerful ORM for .NET
+Small Powerful ORM for .NET
 
 # Installation
 A [nuget](http://nuget.org/packages/MonkeyOrm.MySql) is availble, just run the following command in the [Package Manager Console](http://docs.nuget.org/docs/start-here/using-the-package-manager-console):
