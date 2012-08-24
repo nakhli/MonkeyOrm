@@ -148,7 +148,7 @@ connection.InTransaction().SaveBatch("Users", users);
 ```
 
 # Object Slicing
-In some contexts, the object or hash we'd like to persist in the database has more properties than needed. This can be for security reasons: the object is automatically created from user input; by a [model binder](http://msdn.microsoft.com/en-us/library/system.web.mvc.imodelbinder.aspx) or something similar. This can lead to security vulnerabilities. Our dear github site was [hacked](http://www.theregister.co.uk/2012/03/05/github_hack/) due to a similar issue (if you want to read [more](http://www.diaryofaninja.com/blog/2012/03/11/what-aspnet-mvc-developers-can-learn-from-githubrsquos-security-woes) ).
+In some contexts, the object (or hash) to be saved in the database has more properties than what should be persisted. This can be for security reasons: the object was automatically created from user input; for instance by a [model binder](http://msdn.microsoft.com/en-us/library/system.web.mvc.imodelbinder.aspx) or a similar mechanism. This situation can lead to security vulnerabilities. The github site was [hacked](http://www.theregister.co.uk/2012/03/05/github_hack/) due to a similar issue (if you want to read [more](http://www.diaryofaninja.com/blog/2012/03/11/what-aspnet-mvc-developers-can-learn-from-githubrsquos-security-woes) on the issue).
 
 MonkeyOrm can slice the input object when calling `Save` or `Update` by applying either a black list or a white list filter on object properties.
 
@@ -163,12 +163,12 @@ connection.Update("Users", user, "Id=@id", new { id }, whitelist: new[] { "Name"
 Only allows `Name` and `Age`to be updated, nothing else.
 
 # Interceptors and Blobbing
-Interceptors are functions or actions you can set in order to be called back and to take control when some conditions are met. One interesting interceptor is the `UnknownValueType` that is called when the data to be inserted in a given column does not map directly to a database native type. Here is an example of this situation with the complex type being `ProfileData`:
+Interceptors are functions you can set in order to take control on how the data is processed by MonkeyOrm. One interesting interceptor is the `UnknownValueType` interceptor. It is called when the data to be inserted in a given column does not map directly to a database native type. Here is an example with the property `Profile` holding an instance of POCO type `ProfileData` that can't be directly inserted into the column `Profile` of the `Users` table:
 ```csharp
-connection.Save("Users", new { Name="Joe", Age=67, new ProfileData { /* ... */ });
+connection.Save("Users", new { Name="Joe", Age=67, Profile=new ProfileData { /* ... */ });
 ```
 
-In order object, The `UnknownValueType` callback here have a chance to to "intercept" and transform the `ProfileData` complex object to a different format. A typical example would be to blob (serialize) it. A simple example:
+Here, MonkeyOrm calls the `UnknownValueType` callback in order the give clint code a chance to "intercept" the non-trivial type and transform it. A typical example would be to blob (serialize) the `ProfileData` instance:
 ```csharp
 MonkeyOrm.Settings.Interceptors.UnknownValueType = o =>
 {
