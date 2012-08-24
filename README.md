@@ -187,7 +187,9 @@ connection.Execute("Truncate Table Users");
 ```
 It can also run commands with parameters:
 ```csharp
-connection.Execute("Insert Into Users (Name, Age) Values (@Name, @Age)", new { Name = "Philip", Age = 55 });
+connection.Execute(
+    "Insert Into Users (Name, Age) Values (@Name, @Age)",
+    new { Name = "Philip", Age = 55 });
 ```
 
 # Related Projects
