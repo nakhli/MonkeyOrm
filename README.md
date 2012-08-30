@@ -4,7 +4,7 @@ MonkeyOrm
 Small Powerful ORM for .NET
 
 # Installation
-A [nuget](http://nuget.org/packages/MonkeyOrm.MySql) is availble, just run the following command in the [Package Manager Console](http://docs.nuget.org/docs/start-here/using-the-package-manager-console):
+A [nuget](http://nuget.org/packages/MonkeyOrm.MySql) is available, just run the following command in the [Package Manager Console](http://docs.nuget.org/docs/start-here/using-the-package-manager-console):
 ```powershell
 Install-Package MonkeyOrm.MySql
 ```
@@ -138,7 +138,7 @@ connection.SaveBatch("Users", new[]
 
 By default, one object at a time is read from the provided set and inserted in the database. In order to tune performance/bandwidth more elements can be loaded and inserted at once through the `chunkSize` parameter.
 
-In the following snippet, 100 objects are loaded and inserted at a time -- in the same query -- from the provided enumerable to the database.
+In the following snippet, 100 objects are loaded and inserted at a time —in the same query— from the provided enumerable to the database.
 ```csharp
 connection.SaveBatch("Users", LoadDataFromRemoteSource(), 100);
 ```
