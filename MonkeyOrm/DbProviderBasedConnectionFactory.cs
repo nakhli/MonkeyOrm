@@ -21,19 +21,37 @@ namespace MonkeyOrm
     /// </summary>
     public class DbProviderBasedConnectionFactory : AbstractConnectionFactory
     {
-        private readonly string providerName;
-
         public DbProviderBasedConnectionFactory(string providerName, string connectionString)
             : base(connectionString)
         {
-            this.providerName = providerName;
+            this.ProviderInvariantName = providerName;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DbProviderBasedConnectionFactory"/> class.
+        /// It's the overriding class responsibility to set properly the <see cref="AbstractConnectionFactory.ConnectionString"/>
+        /// and <see cref="ProviderInvariantName"/> properties.
+        /// </summary>
+        protected DbProviderBasedConnectionFactory()
+        {
+        }
+
+        public string ProviderInvariantName { get; protected set; }
+
+        /// <summary>
+        /// Gets a <see cref="DbProviderFactory"/> from <see cref="DbProviderFactories"/> using
+        /// <see cref="ProviderInvariantName"/>.
+        /// </summary>
         public DbProviderFactory DbProviderFactory
         {
-            get { return DbProviderFactories.GetFactory(this.providerName); }
+            get { return DbProviderFactories.GetFactory(this.ProviderInvariantName); }
         }
 
+        /// <summary>
+        /// Creates a new <see cref="IDbConnection"/> using <see cref="DbProviderFactory"/> and the
+        /// provided connections string stored in <see cref="AbstractConnectionFactory.ConnectionString"/>.
+        /// </summary>
+        /// <returns></returns>
         public override IDbConnection Create()
         {
             var connection = this.DbProviderFactory.CreateConnection();

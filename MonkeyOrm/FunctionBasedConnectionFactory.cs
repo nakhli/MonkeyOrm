@@ -16,28 +16,26 @@ using System.Data;
 
 namespace MonkeyOrm
 {
-    public class FunctionBasedConnectionFactory : AbstractConnectionFactory
+    public class FunctionBasedConnectionFactory : IConnectionFactory
     {
-        private readonly Func<IDbConnection> functionFactory;
-
         public FunctionBasedConnectionFactory(Func<IDbConnection> functionFactory)
         {
-            this.functionFactory = functionFactory;
+            this.FunctionFactory = functionFactory;
         }
 
-        public static implicit operator Func<IDbConnection>(FunctionBasedConnectionFactory factory)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FunctionBasedConnectionFactory"/> class.
+        /// It's the overriding class responsibility to set properly the <see cref="FunctionFactory"/> property.
+        /// </summary>
+        protected FunctionBasedConnectionFactory()
         {
-            return () => factory.Create();
         }
 
-        public static implicit operator FunctionBasedConnectionFactory(Func<IDbConnection> functionFactory)
-        {
-            return new FunctionBasedConnectionFactory(functionFactory);
-        }
+        public Func<IDbConnection> FunctionFactory { get; private set; }
 
-        public override IDbConnection Create()
+        public IDbConnection Create()
         {
-            return this.functionFactory();
+            return this.FunctionFactory();
         }
     }
 }

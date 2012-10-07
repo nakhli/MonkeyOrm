@@ -22,7 +22,11 @@ namespace MonkeyOrm
         {
         }
 
-        public ConnectionFactory()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConnectionFactory{T}"/> class.
+        /// It's the overriding class responsibility to set properly the <see cref="AbstractConnectionFactory.ConnectionString"/> property.
+        /// </summary>
+        protected ConnectionFactory()
         {
         }
 

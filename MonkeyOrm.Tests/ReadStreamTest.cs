@@ -57,7 +57,7 @@ namespace MonkeyOrm.Tests
             this.ConnectionFactory().SaveBatch("Test", batch);
 
             int i = 0;
-            var stream = this.ConnectionFactory().ReadStream("SELECT * FROM Test")
+            var strings = this.ConnectionFactory().ReadStream("SELECT * FROM Test")
                 .Where(obj => obj.DataInt > 15 && obj.DataInt < 100)
                 .Select(obj => (string)obj.DataString);
 
@@ -66,7 +66,7 @@ namespace MonkeyOrm.Tests
                 /* nop */
             }
 
-            foreach (var value in stream)
+            foreach (var value in strings)
             {
                 dynamic expected = batch[i++];
                 Assert.AreEqual(expected.DataString, value);
@@ -76,6 +76,13 @@ namespace MonkeyOrm.Tests
             CheckTestObject(batch[0], result);
         }
 
+        [Test]
+        public void EnumerateResultMultipleTimes()
+        {
+            var result = this.ConnectionFactory().ReadStream("SELECT * FROM Test");
+            
+            Assert.AreEqual(result, this.ConnectionFactory().ReadStream("SELECT * FROM Test"));
+        }
 
         [Test]
         public void WithAction([Values(1, 5, 300)] int size)

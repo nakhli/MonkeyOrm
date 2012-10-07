@@ -18,7 +18,8 @@
       <dependency id="Sinbadsoft.Lib.Model" />
     </dependencies>
     <releaseNotes>
-      * DbProviderBasedConnectionFactory made concrete with public constructor.
+      * Removed implicit conversion operator from AbstractConnectionFactory.
+      * Added protected parameterless constructors to IConnectionFactory implementors.
     </releaseNotes>
   </metadata>
 </package>

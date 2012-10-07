@@ -11,7 +11,6 @@
 // <author>Chaker Nakhli</author>
 // <email>chaker.nakhli@sinbadsoft.com</email>
 // <date>2012/05/04</date>
-using System;
 using System.Data;
 
 namespace MonkeyOrm
@@ -28,11 +27,6 @@ namespace MonkeyOrm
         }
 
         protected string ConnectionString { get; set; }
-
-        public static implicit operator Func<IDbConnection>(AbstractConnectionFactory factory)
-        {
-            return () => factory.Create();
-        }
 
         public abstract IDbConnection Create();
     }
