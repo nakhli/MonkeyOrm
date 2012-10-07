@@ -18,19 +18,19 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("MonkeyOrm.MySql")]
-[assembly: AssemblyDescription(@"A small and powerful ORM that doesn't get in your way.
-Features:
-* Built-in CRUD: Create, Read, Update, Delete and Create-or-Update (aka Upsert); 
-* Transactions; 
-* Objects slicing on insertion with a black list or a white list; 
-* Bulk-fetching; 
-* Data streaming; 
-* Batch insertion, with fine-grained control on number of inserted objects per query; 
-* Blobbing; 
-* No fancy DSL, only SQL;
-* Stateless, no caching;
-* Doesn't pollute your code: no base classes to inherit from, no attributes and no xml config;
-* Easy to adopt, easy to get rid off: It's just your POCOs and plain old SQL;")]
+[assembly: AssemblyDescription(@"MonkeyOrm is a small, powerful open source ORM for the .NET platform.
+Website: http://www.monkeyorm.com . Fork source code on github: https://github.com/Sinbadsoft/MonkeyOrm.
+Some of MonkeyOrm features and design choices:
+* Doesn’t pollute your code: no base classes to inherit from, no attributes and no xml config.
+* Easy to adopt, easy to get rid off: No lock-in, it’s just your POCOs and plain old SQL.
+* Stateless, no caching.
+* Built-in CRUD: Create, Read, Update, Delete and Create-or-Update (aka Upsert).
+* Transactions.
+* Objects slicing on insertion with a black list or a white list.
+* Bulk-fetching.
+* Data streaming.
+* Batch insertion, with fine-grained control on number of inserted objects per query.
+* Blobbing.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Sinbadsoft")]
 [assembly: AssemblyProduct("MonkeyOrm.MySql")]
