@@ -280,8 +280,9 @@ Full-Width Styles
 }
 
 #project_header {
-  background: url('../images/monkeyorm-logo.jpg') left center no-repeat;
-  padding-left: 190px;
+  background: url('../images/monkeyorm_monkey_orm.png') left center no-repeat;
+  width: 444px;
+  height: 98px;
 }
 
 #project_title {
@@ -385,11 +386,6 @@ Small Device Styles
     min-width: 320px;
     max-width: 480px;
   }
-
-  #project_header {
-	background: url('../images/monkeyorm-logo.jpg') center top no-repeat;
-	padding: 120px 0 0 0;
-  }
   
   #project_title {
 	font-size: 48px;
@@ -399,6 +395,13 @@ Small Device Styles
   #project_tagline {
 	font-size: 20px;
 	text-align: center;
+  }
+
+  #project_header {
+    background: url('../images/monkeyorm_monkey_orm_small.png') left center no-repeat;
+    width: 340px;
+    height: 155px;
+    margin: auto
   }
 
   h1 {
