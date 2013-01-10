@@ -1,5 +1,4 @@
-MonkeyOrm
-=========
+![My image](http://www.monkeyorm.com/images/monkeyorm_monkey_orm_small.png)
 
 Small Powerful ORM for .NET
 
@@ -197,3 +196,5 @@ connection.Execute(
 * [PetaPoco](http://www.toptensoftware.com/petapoco/)
 * [Dappler](http://code.google.com/p/dapper-dot-net/)
 * [Simple.Data](https://github.com/markrendle/Simple.Data)
+
+MonkeyOrm development is sponsored by [Sinbasdoft](http://www.sinbadsoft.com)
