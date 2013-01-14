@@ -197,4 +197,7 @@ connection.Execute(
 * [Dappler](http://code.google.com/p/dapper-dot-net/)
 * [Simple.Data](https://github.com/markrendle/Simple.Data)
 
-MonkeyOrm development is sponsored by [Sinbasdoft](http://www.sinbadsoft.com)
+# License
+Copyright 2012 [Sinbasdoft](http://www.sinbadsoft.com).
+
+Licensed under the Apache License, [Version 2.0](http://www.apache.org/licenses/LICENSE-2.0).
