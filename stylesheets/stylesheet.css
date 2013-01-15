@@ -242,6 +242,10 @@ img {
   max-width: 100%;
 }
 
+ul#share { margin:0; padding:0; list-style:none; }
+ul#share li { display:inline; vertical-align: bottom; }
+
+
 /*******************************************************************************
 Full-Width Styles
 *******************************************************************************/
