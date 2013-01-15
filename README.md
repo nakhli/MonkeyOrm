@@ -1,10 +1,9 @@
-MonkeyOrm
-=========
+![My image](http://www.monkeyorm.com/images/monkeyorm_monkey_orm_small.png)
 
-Small Powerful ORM for .NET
+MonkeyOrm is a small, powerful ORM for .NET.
 
 # Installation
-A [nuget](http://nuget.org/packages/MonkeyOrm.MySql) is available, just run the following command in the [Package Manager Console](http://docs.nuget.org/docs/start-here/using-the-package-manager-console):
+Only MySql is supported at the moment. A [nuget](http://nuget.org/packages/MonkeyOrm.MySql) is available, just run the following command in the [Package Manager Console](http://docs.nuget.org/docs/start-here/using-the-package-manager-console):
 ```powershell
 Install-Package MonkeyOrm.MySql
 ```
@@ -15,7 +14,7 @@ POCOs:
 ```csharp
 connection.Save("Users", new User { Name = "Anne", Age = 31 });
 ```
-Anonymous:
+Anonymous objects:
 
 ```csharp
 connection.Save("Users", new { Name = "John", Age = 26 });
@@ -149,7 +148,7 @@ connection.InTransaction().SaveBatch("Users", users);
 ```
 
 # Object Slicing
-In some contexts, the object (or hash) to be saved in the database has more properties than what should be persisted. This can be for security reasons: the object was automatically created from user input; for instance by a [model binder](http://msdn.microsoft.com/en-us/library/system.web.mvc.imodelbinder.aspx) or a similar mechanism. This situation can lead to security vulnerabilities. The github site was [hacked](http://www.theregister.co.uk/2012/03/05/github_hack/) due to a similar issue (if you want to read [more](http://www.diaryofaninja.com/blog/2012/03/11/what-aspnet-mvc-developers-can-learn-from-githubrsquos-security-woes) on the issue).
+In some contexts, the object (or hash) to be saved in the database needs to be filtered in order to exclude some of its properties. This can be for security reasons: the object was automatically mapped from user input —by a [model binder](http://msdn.microsoft.com/en-us/library/system.web.mvc.imodelbinder.aspx) or a similar mechanism— and thus needs to be checked against the set of authorized properties. Not properly filtering user input is a security vulnerability; the github site was [hacked](http://www.theregister.co.uk/2012/03/05/github_hack/) due to a similar issue (if you want to read [more](http://www.diaryofaninja.com/blog/2012/03/11/what-aspnet-mvc-developers-can-learn-from-githubrsquos-security-woes) about this).
 
 MonkeyOrm can slice the input object when calling `Save` or `Update` by applying either a black list or a white list filter on object properties.
 
@@ -195,5 +194,10 @@ connection.Execute(
 # Related Projects
 * [Massive](https://github.com/robconery/massive)
 * [PetaPoco](http://www.toptensoftware.com/petapoco/)
-* [Dappler](http://code.google.com/p/dapper-dot-net/)
+* [Dapper](http://code.google.com/p/dapper-dot-net/)
 * [Simple.Data](https://github.com/markrendle/Simple.Data)
+
+# License
+Copyright 2012-2013 [Sinbasdoft](http://www.sinbadsoft.com).
+
+Licensed under the Apache License, [Version 2.0](http://www.apache.org/licenses/LICENSE-2.0).
