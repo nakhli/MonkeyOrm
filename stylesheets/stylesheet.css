@@ -243,7 +243,8 @@ img {
 }
 
 ul#share { margin:0; padding:0; list-style:none; }
-ul#share li { display:inline; vertical-align: bottom; }
+ul#share li { display:inline; vertical-align: bottom; margin: 0; padding: 0 10px 0 0; }
+ul#share li:last-child { padding: 0; }
 
 
 /*******************************************************************************
