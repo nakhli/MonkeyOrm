@@ -14,7 +14,7 @@ POCOs:
 ```csharp
 connection.Save("Users", new User { Name = "Anne", Age = 31 });
 ```
-Anonymous:
+Anonymous objects:
 
 ```csharp
 connection.Save("Users", new { Name = "John", Age = 26 });
