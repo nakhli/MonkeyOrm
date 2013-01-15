@@ -194,7 +194,7 @@ connection.Execute(
 # Related Projects
 * [Massive](https://github.com/robconery/massive)
 * [PetaPoco](http://www.toptensoftware.com/petapoco/)
-* [Dappler](http://code.google.com/p/dapper-dot-net/)
+* [Dapper](http://code.google.com/p/dapper-dot-net/)
 * [Simple.Data](https://github.com/markrendle/Simple.Data)
 
 # License
