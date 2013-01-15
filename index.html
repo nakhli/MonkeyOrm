@@ -70,7 +70,7 @@
 <h1>
 <a name="installation" class="anchor" href="#installation"><span class="mini-icon mini-icon-link"></span></a>Installation</h1>
 
-<p>Only MySql is supported at the moment. A <a href="http://nuget.org/packages/MonkeyOrm.MySql">nuget</a> is availble, just run the following command in the <a href="http://docs.nuget.org/docs/start-here/using-the-package-manager-console">Package Manager Console</a>:</p>
+<p>Only MySql is supported at the moment. A <a href="http://nuget.org/packages/MonkeyOrm.MySql">nuget</a> is available, just run the following command in the <a href="http://docs.nuget.org/docs/start-here/using-the-package-manager-console">Package Manager Console</a>:</p>
 
 <div class="highlight"><pre><span class="n">Install-Package</span> <span class="n">MonkeyOrm</span><span class="p">.</span><span class="n">MySql</span>
 </pre></div>
@@ -216,7 +216,7 @@ any connection factory function <a href="http://msdn.microsoft.com/en-us/library
 
 <p>By default, one object at a time is read from the provided set and inserted in the database. In order to tune performance/bandwidth more elements can be loaded and inserted at once through the <code>chunkSize</code> parameter.</p>
 
-<p>In the following snippet, 100 objects are loaded and inserted at a time -- in the same query -- from the provided enumerable to the database.</p>
+<p>In the following snippet, 100 objects are loaded and inserted at a time &mdash;in the same query&mdash; from the provided enumerable to the database.</p>
 
 <div class="highlight"><pre><span class="n">connection</span><span class="p">.</span><span class="n">SaveBatch</span><span class="p">(</span><span class="s">"Users"</span><span class="p">,</span> <span class="n">LoadDataFromRemoteSource</span><span class="p">(),</span> <span class="m">100</span><span class="p">);</span>
 </pre></div>
@@ -229,7 +229,7 @@ any connection factory function <a href="http://msdn.microsoft.com/en-us/library
 <h1>
 <a name="object-slicing" class="anchor" href="#object-slicing"><span class="mini-icon mini-icon-link"></span></a>Object Slicing</h1>
 
-<p>In some contexts, the object (or hash) to be saved in the database has more properties than what should be persisted. This can be for security reasons: the object was automatically created from user input; for instance by a <a href="http://msdn.microsoft.com/en-us/library/system.web.mvc.imodelbinder.aspx">model binder</a> or a similar mechanism. This situation can lead to security vulnerabilities. The github site was <a href="http://www.theregister.co.uk/2012/03/05/github_hack/">hacked</a> due to a similar issue (if you want to read <a href="http://www.diaryofaninja.com/blog/2012/03/11/what-aspnet-mvc-developers-can-learn-from-githubrsquos-security-woes">more</a> on the issue).</p>
+<p>In some contexts, the object (or hash) to be saved in the database needs to be filtered in order to exclude some of its properties. This can be for security reasons: the object was automatically mapped from user input &mdash;by a <a href="http://msdn.microsoft.com/en-us/library/system.web.mvc.imodelbinder.aspx">model binder</a> or a similar mechanism&mdash; and thus needs to be checked against the set of authorized properties. Not properly filtering user input is a security vulnerability; the github site was <a href="http://www.theregister.co.uk/2012/03/05/github_hack/">hacked</a> due to a similar issue (if you want to read <a href="http://www.diaryofaninja.com/blog/2012/03/11/what-aspnet-mvc-developers-can-learn-from-githubrsquos-security-woes">more</a> about this).</p>
 
 <p>MonkeyOrm can slice the input object when calling <code>Save</code> or <code>Update</code> by applying either a black list or a white list filter on object properties.</p>
 
@@ -253,7 +253,7 @@ any connection factory function <a href="http://msdn.microsoft.com/en-us/library
 
 <p>The property <code>Profile</code> holds an instance of POCO type <code>ProfileData</code>. This type can't be directly inserted into the column <code>Profile</code> of the <code>Users</code> table as it is.</p>
 
-<p>In this situation, MonkeyOrm calls the <code>UnknownValueType</code> callback in order the give client code a chance to "intercept" the non-trivial type and transform it to something the database can handle. A typical example would be to blob (serialize) the <code>ProfileData</code> instance. Here is an example of a xml blobber interceptor:</p>
+<p>In this situation, MonkeyOrm calls the <code>UnknownValueType</code> callback in order the give clint code a chance to "intercept" the non-trivial type and transform it to something the database can handle. A typical example would be to blob (serialize) the <code>ProfileData</code> instance. Here is an example of a xml blobber interceptor:</p>
 
 <div class="highlight"><pre><span class="n">MonkeyOrm</span><span class="p">.</span><span class="n">Settings</span><span class="p">.</span><span class="n">Interceptors</span><span class="p">.</span><span class="n">UnknownValueType</span> <span class="p">=</span> <span class="n">o</span> <span class="p">=&gt;</span>
 <span class="p">{</span>
@@ -277,6 +277,7 @@ any connection factory function <a href="http://msdn.microsoft.com/en-us/library
     <span class="s">"Insert Into Users (Name, Age) Values (@Name, @Age)"</span><span class="p">,</span>
     <span class="k">new</span> <span class="p">{</span> <span class="n">Name</span> <span class="p">=</span> <span class="s">"Philip"</span><span class="p">,</span> <span class="n">Age</span> <span class="p">=</span> <span class="m">55</span> <span class="p">});</span>
 </pre></div>
+
 <h1>
 <a name="related-projects" class="anchor" href="#related-projects"><span class="mini-icon mini-icon-link"></span></a>Related Projects</h1>
 
@@ -285,14 +286,12 @@ any connection factory function <a href="http://msdn.microsoft.com/en-us/library
 <li><a href="http://www.toptensoftware.com/petapoco/">PetaPoco</a></li>
 <li><a href="http://code.google.com/p/dapper-dot-net/">Dapper</a></li>
 <li><a href="https://github.com/markrendle/Simple.Data">Simple.Data</a></li>
-</ul>
-<h1>
+</ul><h1>
 <a name="license" class="anchor" href="#license"><span class="mini-icon mini-icon-link"></span></a>License</h1>
 
 <p>Copyright 2012-2013 <a href="http://www.sinbadsoft.com">Sinbasdoft</a>.</p>
 
-<p>Licensed under the Apache License, <a href="http://www.apache.org/licenses/LICENSE-2.0">Version 2.0</a>.</p>
-<!-- Auto generated content End-->
+<p>Licensed under the Apache License, <a href="http://www.apache.org/licenses/LICENSE-2.0">Version 2.0</a>.</p><!-- Auto generated content End-->
 </section>
 <script src="//platform.linkedin.com/in.js" type="text/javascript"></script>
   </body>
