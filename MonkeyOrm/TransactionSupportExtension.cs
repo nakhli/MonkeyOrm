@@ -59,7 +59,7 @@ namespace MonkeyOrm
                     T value = action(transaction);
                     if (this.AutoCommit)
                     {
-                        transaction.Commit();
+                        CommitTransaction(transaction);
                     }
 
                     return value;
@@ -73,7 +73,7 @@ namespace MonkeyOrm
                     action(transaction);
                     if (this.AutoCommit)
                     {
-                        transaction.Commit();
+                        CommitTransaction(transaction);
                     }
                 }
             }
@@ -83,6 +83,23 @@ namespace MonkeyOrm
                 return this.isolation.HasValue
                     ? connection.BeginTransaction(this.isolation.Value)
                     : connection.BeginTransaction();
+            }
+
+            private static void CommitTransaction(IDbTransaction transaction)
+            {
+                try
+                {
+                    transaction.Commit();
+                }
+                catch (InvalidOperationException)
+                {
+                    // The transaction has already been committed or rolled back.
+                    // -or- The connection is broken.
+                    if (transaction.Connection.State == ConnectionState.Broken)
+                    {
+                        throw;
+                    }
+                }
             }
         }
 

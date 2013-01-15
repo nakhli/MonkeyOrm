@@ -21,14 +21,21 @@ namespace MonkeyOrm.Tests
         [Test]
         public void DoesntSaveWithoutCommit()
         {
-            this.DoesntSaveWithoutCommit(false);
+            this.DoesntSave(false, false);
         }
 
         [Test]
         public void DoesntSaveOnRollback()
         {
-            this.DoesntSaveWithoutCommit(true);
+            this.DoesntSave(true, false);
         }
+
+        [Test]
+        public void DoesntSaveOnRollbackWithAutoCommit()
+        {
+            this.DoesntSave(true, true);
+        }
+
 
         [Test]
         public void SaveAndReadBack()
@@ -59,6 +66,21 @@ namespace MonkeyOrm.Tests
             this.ReadBackAndCheckValues(values, id);
         }
 
+        [Test]
+        public void ExplicitCommitWithAutoCommit()
+        {
+            var values = new { DataInt = 5, DataLong = 3000000000L, DataString = "hello world" };
+            int id = -1;
+            this.ConnectionFactory().InTransaction(true).Do(
+                transaction =>
+                {
+                    transaction.Save("Test", values, out id);
+                    transaction.Commit();
+                    Assert.AreEqual(1, id);
+                });
+            this.ReadBackAndCheckValues(values, id);
+        }
+
         private void ReadBackAndCheckValues(dynamic values, object id)
         {
             var read = this.ConnectionFactory().ReadOne("SELECT * FROM Test");
@@ -68,11 +90,11 @@ namespace MonkeyOrm.Tests
             Assert.AreEqual(values.DataString, read.DataString);
         }
 
-        private void DoesntSaveWithoutCommit(bool explicitRollback)
+        private void DoesntSave(bool explicitRollback, bool autocommit)
         {
             var values = new { DataInt = 5, DataLong = 3000000000L, DataString = "hello world" };
             int id = -1;
-            this.ConnectionFactory().InTransaction().Do(
+            this.ConnectionFactory().InTransaction(autocommit).Do(
                 transaction =>
                 {
                     transaction.Save("Test", values, out id);

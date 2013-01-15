@@ -70,7 +70,7 @@ namespace MonkeyOrm.Tests
             var insertedData = this.ConnectionFactory().ReadAll("SELECT * FROM Test");
             for (var i = 0; i < batch.Count; i++)
             {
-                CheckTestObject(batch[i], insertedData[i], i == 2);
+                DbTestBase.CheckTestObject(batch[i], insertedData[i], i == 2);
             }
         }
 
@@ -101,7 +101,7 @@ namespace MonkeyOrm.Tests
             var insertedData = this.ConnectionFactory().ReadAll("SELECT * FROM Test");
             for (var i = 0; i < batch.Count; i++)
             {
-                CheckTestObject(batch[i], insertedData[i], defaultValueForString);
+                DbTestBase.CheckTestObject(batch[i], insertedData[i], defaultValueForString);
             }
         }
     }
