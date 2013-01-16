@@ -18,8 +18,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("MonkeyOrm.MySql")]
-[assembly: AssemblyDescription(@"MonkeyOrm is a small, powerful open source ORM for the .NET platform.
-Website: http://www.monkeyorm.com . Fork source code on github: https://github.com/Sinbadsoft/MonkeyOrm.
+[assembly: AssemblyDescription(@"MonkeyOrm is a small, powerful SQL-based ORM for .NET.
+Website: http://www.monkeyorm.com .
+Source code: https://github.com/Sinbadsoft/MonkeyOrm.
 Some of MonkeyOrm features and design choices:
 * Doesn’t pollute your code: no base classes to inherit from, no attributes and no xml config.
 * Easy to adopt, easy to get rid of: No lock-in, it’s just your POCOs and plain old SQL.
@@ -34,7 +35,7 @@ Some of MonkeyOrm features and design choices:
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Sinbadsoft")]
 [assembly: AssemblyProduct("MonkeyOrm.MySql")]
-[assembly: AssemblyCopyright("Copyright © Sinbadsoft 2011-2012")]
+[assembly: AssemblyCopyright("Copyright © Sinbadsoft 2011-2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -56,5 +57,5 @@ Some of MonkeyOrm features and design choices:
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.4.5.0")]
+[assembly: AssemblyVersion("0.4.6.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
