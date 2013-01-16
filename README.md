@@ -1,6 +1,6 @@
 ![My image](http://www.monkeyorm.com/images/monkeyorm_monkey_orm_small.png)
 
-MonkeyOrm is a small, powerful ORM for .NET.
+MonkeyOrm is a small, powerful SQL-based ORM for .NET.
 
 # Installation
 Only MySql is supported at the moment. A [nuget](http://nuget.org/packages/MonkeyOrm.MySql) is available, just run the following command in the [Package Manager Console](http://docs.nuget.org/docs/start-here/using-the-package-manager-console):
