@@ -21,6 +21,8 @@ using Sinbadsoft.Lib.Model.ToExpando;
 
 namespace MonkeyOrm
 {
+    using Sinbadsoft.Lib.Model.CopyTo;
+
     public static class CrudDbConnectionExtension
     {
         public static int Execute(this IDbConnection connection, string nonQuery, object parameters = null, IDbTransaction transaction = null)
@@ -102,7 +104,7 @@ namespace MonkeyOrm
             using (var command = connection.CreateInsertCommand(table, values, whitelist, blacklist, transaction))
             {
                 int affectedRows = command.ExecuteNonQuery();
-                id = (long)connection.LastInsertedId();
+                id = connection.LastInsertedId();
                 return affectedRows;
             }
         }
@@ -171,6 +173,54 @@ namespace MonkeyOrm
             using (var command = connection.CreateDeleteCommand(table, where, parameters, transaction))
             {
                 return command.ExecuteNonQuery();
+            }
+        }
+
+        public static T ReadOne<T>(this IDbConnection connection, string query, object parameters = null, IDbTransaction transaction = null) where T : new()
+        {
+            using (var command = connection.CreateCommand(query, parameters, transaction))
+            using (var reader = command.ExecuteReader())
+            {
+                return reader.Read() ? reader.CopyTo<T>() : default(T);
+            }
+        }
+
+        public static List<T> ReadAll<T>(this IDbConnection connection, string query, object parameters = null, IDbTransaction transaction = null) where T : new()
+        {
+            using (var command = connection.CreateCommand(query, parameters, transaction))
+            using (var reader = command.ExecuteReader())
+            {
+                var result = new List<T>();
+                while (reader.Read())
+                {
+                    result.Add(reader.CopyTo<T>());
+                }
+
+                return result;
+            }
+        }
+
+        public static IEnumerable<T> ReadStream<T>(this IDbConnection connection, string query, object parameters = null, IDbTransaction transaction = null) where T : new()
+        {
+            using (var command = connection.CreateCommand(query, parameters, transaction))
+            using (var reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    yield return reader.CopyTo<T>();
+                }
+            }
+        }
+
+        public static void ReadStream<T>(this IDbConnection connection, string query, Func<T, bool> action, object parameters = null, IDbTransaction transaction = null) where T : new()
+        {
+            using (var command = connection.CreateCommand(query, parameters, transaction))
+            using (var reader = command.ExecuteReader())
+            {
+                while (reader.Read() && action(reader.CopyTo<T>()))
+                {
+                    // do nothing
+                }
             }
         }
 

@@ -96,7 +96,7 @@ namespace MonkeyOrm.Tests
             Assert.AreEqual(0, this.ConnectionFactory().ReadAll("SELECT * FROM Test").Count);
         }
 
-        private void ReadbackAndCheck(IList<object> batch, bool defaultValueForString = false)
+        private void ReadbackAndCheck(IList<TestData> batch, bool defaultValueForString = false)
         {
             var insertedData = this.ConnectionFactory().ReadAll("SELECT * FROM Test");
             for (var i = 0; i < batch.Count; i++)

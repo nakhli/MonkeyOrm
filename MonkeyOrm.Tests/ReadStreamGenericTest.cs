@@ -1,25 +1,11 @@
-// <copyright file="ReadStreamTest.cs" company="Sinbadsoft">
-// Copyright (c) Chaker Nakhli 2012
-// Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-// this file except in compliance with the License. You may obtain a copy of the 
-// License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by 
-// applicable law or agreed to in writing, software distributed under the License
-// is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing
-// permissions and limitations under the License.
-// </copyright>
-// <author>Chaker Nakhli</author>
-// <email>chaker.nakhli@sinbadsoft.com</email>
-// <date>2012/05/15</date>
-
-using System.Linq;
-
-using NUnit.Framework;
-
 namespace MonkeyOrm.Tests
 {
+    using System.Linq;
+
+    using NUnit.Framework;
+
     [TestFixture]
-    public class ReadStreamTest : DbTestBase
+    public class ReadStreamGenericTest : DbTestBase
     {
         [Test]
         public void RawConnectionWithEnumerableResult([Values(1, 5, 300)] int size)
@@ -30,7 +16,7 @@ namespace MonkeyOrm.Tests
             {
                 connection.Open();
                 int i = 0;
-                foreach (var actual in connection.ReadStream("SELECT * FROM Test"))
+                foreach (var actual in connection.ReadStream<TestData>("SELECT * FROM Test"))
                 {
                     DbTestBase.CheckTestObject(batch[i++], actual);
                 }
@@ -44,7 +30,7 @@ namespace MonkeyOrm.Tests
             this.ConnectionFactory().SaveBatch("Test", batch);
 
             int i = 0;
-            foreach (var actual in this.ConnectionFactory().ReadStream("SELECT * FROM Test"))
+            foreach (var actual in this.ConnectionFactory().ReadStream<TestData>("SELECT * FROM Test"))
             {
                 DbTestBase.CheckTestObject(batch[i++], actual);
             }
@@ -57,11 +43,11 @@ namespace MonkeyOrm.Tests
             this.ConnectionFactory().SaveBatch("Test", batch);
 
             int i = 0;
-            var strings = this.ConnectionFactory().ReadStream("SELECT * FROM Test")
+            var strings = this.ConnectionFactory().ReadStream<TestData>("SELECT * FROM Test")
                 .Where(obj => obj.DataInt > 15 && obj.DataInt < 100)
-                .Select(obj => (string)obj.DataString);
+                .Select(obj => obj.DataString);
 
-            while (i < batch.Count && ((dynamic)batch[i++]).DataInt < 15)
+            while (i < batch.Count && batch[i++].DataInt < 15)
             {
                 /* nop */
             }
@@ -72,16 +58,16 @@ namespace MonkeyOrm.Tests
                 Assert.AreEqual(expected.DataString, value);
             }
 
-            var result = this.ConnectionFactory().ReadStream("SELECT * FROM Test").First();
+            var result = this.ConnectionFactory().ReadStream<TestData>("SELECT * FROM Test").First();
             DbTestBase.CheckTestObject(batch[0], result);
         }
 
         [Test]
         public void EnumerateResultMultipleTimes()
         {
-            var result = this.ConnectionFactory().ReadStream("SELECT * FROM Test");
-            
-            Assert.AreEqual(result, this.ConnectionFactory().ReadStream("SELECT * FROM Test"));
+            var result = this.ConnectionFactory().ReadStream<TestData>("SELECT * FROM Test");
+
+            Assert.AreEqual(result, this.ConnectionFactory().ReadStream<TestData>("SELECT * FROM Test"));
         }
 
         [Test]
@@ -91,13 +77,13 @@ namespace MonkeyOrm.Tests
             this.ConnectionFactory().SaveBatch("Test", batch);
 
             int i = 0;
-            this.ConnectionFactory().ReadStream(
+            this.ConnectionFactory().ReadStream<TestData>(
                 "SELECT * FROM Test",
                 actual =>
-                {
-                    CheckTestObject(batch[i++], actual);
-                    return true;
-                });
+                    {
+                        CheckTestObject(batch[i++], actual);
+                        return true;
+                    });
         }
 
         [Test]
@@ -107,13 +93,13 @@ namespace MonkeyOrm.Tests
             this.ConnectionFactory().SaveBatch("Test", batch);
 
             int i = 0;
-            this.ConnectionFactory().ReadStream(
+            this.ConnectionFactory().ReadStream<TestData>(
                 "SELECT * FROM Test",
                 actual =>
-                {
-                    CheckTestObject(batch[i++], actual);
-                    return i < 65;
-                });
+                    {
+                        CheckTestObject(batch[i++], actual);
+                        return i < 65;
+                    });
             Assert.AreEqual(65, i);
         }
     }

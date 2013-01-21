@@ -19,6 +19,8 @@ using Sinbadsoft.Lib.Model.ToExpando;
 
 namespace MonkeyOrm
 {
+    using Sinbadsoft.Lib.Model.CopyTo;
+
     public static class CrudConnectionFactoryFunctionExtension
     {
         public static int Execute(this Func<IDbConnection> connectionFactory, string nonQuery, object parameters = null)
@@ -133,6 +135,49 @@ namespace MonkeyOrm
             {
                 connection.Open();
                 return connection.Delete(table, where, parameters);
+            }
+        }
+
+        public static List<T> ReadAll<T>(this Func<IDbConnection> connectionFactory, string query, object parameters = null) where T : new()
+        {
+            using (var connection = connectionFactory())
+            {
+                connection.Open();
+                return connection.ReadAll<T>(query, parameters);
+            }
+        }
+
+        public static IEnumerable<T> ReadStream<T>(this Func<IDbConnection> connectionFactory, string query, object parameters = null) where T : new()
+        {
+            using (var connection = connectionFactory())
+            {
+                connection.Open();
+                using (var command = connection.CreateCommand(query, parameters))
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        yield return reader.CopyTo<T>();
+                    }
+                }
+            }
+        }
+
+        public static void ReadStream<T>(this Func<IDbConnection> connectionFactory, string query, Func<T, bool> action, object parameters = null) where T : new()
+        {
+            using (var connection = connectionFactory())
+            {
+                connection.Open();
+                connection.ReadStream(query, action, parameters);
+            }
+        }
+
+        public static T ReadOne<T>(this Func<IDbConnection> connectionFactory, string query, object parameters = null) where T : new()
+        {
+            using (var connection = connectionFactory())
+            {
+                connection.Open();
+                return connection.ReadOne<T>(query, parameters);
             }
         }
     }

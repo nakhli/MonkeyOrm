@@ -89,11 +89,11 @@ namespace MonkeyOrm.Tests
         /// <summary>
         /// Generates a batch of objects all of them having the same property set.
         /// </summary>
-        protected static IEnumerable<object> GenerateBatch(int size)
+        protected static IEnumerable<TestData> GenerateBatch(int size)
         {
             for (int i = 0; i < size; i++)
             {
-                yield return new { DataInt = 5 * i, DataLong = 3000000000L + (1000 * i), DataString = "hello world" + i };
+                yield return new TestData { DataInt = 5 * i, DataLong = 3000000000L + (1000 * i), DataString = "hello world" + i };
             }
         }
 
@@ -107,6 +107,15 @@ namespace MonkeyOrm.Tests
             var connection = this.ConnectionFactory().Create();
             connection.Open();
             return connection;
+        }
+
+        public class TestData
+        {
+            public int DataInt { get; set; }
+
+            public long DataLong { get; set; }
+
+            public string DataString { get; set; }
         }
     }
 }
