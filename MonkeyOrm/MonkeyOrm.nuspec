@@ -13,13 +13,12 @@
     <owners>Sinbadsoft</owners>
     <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
     <projectUrl>http://www.monkeyorm.com</projectUrl>
-    <copyright>Copyright (c) Chaker Nakhli 2010-2012. Licensed under the Apache License, Version 2.0</copyright>
+    <copyright>Copyright (c) Chaker Nakhli 2010-2013. Licensed under the Apache License, Version 2.0</copyright>
     <dependencies>
       <dependency id="Sinbadsoft.Lib.Model" />
     </dependencies>
     <releaseNotes>
-      * Removed implicit conversion operator from AbstractConnectionFactory.
-      * Added protected parameterless constructors to IConnectionFactory implementors.
+      * Strongly typed reads: now ReadOne, ReadAll and ReadStream can return custom user types.
     </releaseNotes>
   </metadata>
 </package>
