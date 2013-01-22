@@ -36,8 +36,8 @@ connection.Save("Users", new User { Name = "Pablo", Age = 49 }, out pabloId);
 
 ##### What the heck is `connection`?
 MonkeyOrm Api consists mainly of extension methods, just like the <code>Save</code> method in the snippets above.
-In order to make things easier for client code, several types are extended with the same methods. Actually, `connection` can be an [<code>IDbConnection</code>](http://msdn.microsoft.com/en-us/library/system.data.idbconnection.aspx), an [<code>IDbTransaction</code>](http://msdn.microsoft.com/en-us/library/system.data.idbtransaction.aspx), 
-any connection factory function [`Func<IDbConnection>`](http://msdn.microsoft.com/en-us/library/bb534960.aspx), or the MonkeyOrm defined interface [<code>IConnectionFactory</code>](https://github.com/Sinbadsoft/MonkeyOrm/blob/master/MonkeyOrm/IConnectionFactory.cs).
+Several types are extended: `connection` can be an [<code>IDbConnection</code>](http://msdn.microsoft.com/en-us/library/system.data.idbconnection.aspx), an [<code>IDbTransaction</code>](http://msdn.microsoft.com/en-us/library/system.data.idbtransaction.aspx), 
+any function in your code returning a new connection [`Func<IDbConnection>`](http://msdn.microsoft.com/en-us/library/bb534960.aspx), or the MonkeyOrm defined interface [<code>IConnectionFactory</code>](https://github.com/Sinbadsoft/MonkeyOrm/blob/master/MonkeyOrm/IConnectionFactory.cs).
 
 
 
@@ -78,24 +78,24 @@ connection.Delete("Users", "Name=@name", new { name = "Sauron" });
 ```
 
 # Stream Read
-Instead of bulk fetching query results in memory, they are wrapped in an enumerable for lazy evaluation. Items are loaded from the databse when the result is actually enumerated, one at a time.
+Instead of bulk fetching query results in memory, they are wrapped in an enumerable for lazy evaluation. Items are loaded from the databse when the returned `IEnumerable` is actually enumerated, one at a time.
 
 Here is an example where results are streamed from the database to a file on disk:
 ```csharp
 var users = connection.ReadStream("Select * From Users");
 
-using(var file = new StreamWriter(Path.GetTempFileName()))
+using(var file = new StreamWriter("result.txt"))
 foreach (var user in users)
 {
     file.WriteLine("{0} - {1}", user.Name, user.Age);
 }
 ```
 
-Two Bonus Points: (1) the result enumerable can be enumerated multiple times if data needs to be re-streamed from the database (the query will be executed again), (2) Linq queries can be used on the result as for any enumerable.
+Two Bonus Points: (1) the result enumerable can be enumerated multiple times if data needs to be re-streamed from the database (the query will be executed again), (2) Linq queries can be used on the result as for any enumerable, no restrictions.
 
-`ReadStream` has also an overload that, instead of returning the result as enumerable, it takes a function that it calls for each result item until it returns `false`. The snippet above would be equivalent to:
+`ReadStream` has also an overload that —instead of returning the result as an enumerable— takes a function that it calls for each result item until it returns `false`. The snippet above would be equivalent to:
 ```csharp
-using(var file = new StreamWriter(Path.GetTempFileName()))
+using(var file = new StreamWriter("result.txt"))
 connection.ReadStream("Select * From Users", user => 
 {
     file.WriteLine("{0} - {1}", user.Name, user.Age);
@@ -113,7 +113,7 @@ int spockId = connection.InTransaction(autocommit: true).Do(t =>
     return id;
 });
 ```
-The transaction block can be a function or an action. The return value, if any, will be returned back to client code. The transaction can be manually committed at any point by invoking `t.Commit()`. Setting `autocommit` parameter to `true` will simply insert a call to `Commit()` after the transaction block.
+The transaction block can be a function or an action. The return value, if any, is returned back to client code. The transaction can be manually committed at any point by invoking `t.Commit()`. Setting the `autocommit` parameter to `true` will insert a call to `Commit()` after the transaction block.
 
 The transaction [isolation level](http://msdn.microsoft.com/en-us/library/system.data.isolationlevel.aspx) can be specified using the `isolation` parameter:
 ```csharp
@@ -124,7 +124,7 @@ connection.InTransaction(true, IsolationLevel.Serializable).Do(t =>
 });
 ```
 # Batch insertion
-Batch insertion enables insertion of enumerable data sets; whether this data set is held in memory or streamed from any other source (file, database, network etc.).
+Batch insertion enables insertion of enumerable data sets; whether this data set is held in memory or streamed from any other source (file, database, network, computed on the fly etc.).
 
 ```csharp
 connection.SaveBatch("Users", new[]
@@ -135,9 +135,9 @@ connection.SaveBatch("Users", new[]
     });
 ```
 
-By default, one object at a time is read from the provided set and inserted in the database. In order to tune performance/bandwidth more elements can be loaded and inserted at once through the `chunkSize` parameter.
+By default, one object at a time is read from the provided enumerable and inserted in the database. In order to tune memory usage vs network round-trips more elements can be loaded and inserted at once. This is controlled by the `chunkSize` parameter.
 
-In the following snippet, 100 objects are loaded and inserted at a time —in the same query— from the provided enumerable to the database.
+In the following snippet, 100 objects are loaded and inserted at once —in the same query— from the provided enumerable to the database.
 ```csharp
 connection.SaveBatch("Users", LoadDataFromRemoteSource(), 100);
 ```
@@ -148,14 +148,14 @@ connection.InTransaction().SaveBatch("Users", users);
 ```
 
 # Object Slicing
-In some contexts, the object (or hash) to be saved in the database needs to be filtered in order to exclude some of its properties. This can be for security reasons: the object was automatically mapped from user input —by a [model binder](http://msdn.microsoft.com/en-us/library/system.web.mvc.imodelbinder.aspx) or a similar mechanism— and thus needs to be checked against the set of authorized properties. Not properly filtering user input is a security vulnerability; the github site was [hacked](http://www.theregister.co.uk/2012/03/05/github_hack/) due to a similar issue (if you want to read [more](http://www.diaryofaninja.com/blog/2012/03/11/what-aspnet-mvc-developers-can-learn-from-githubrsquos-security-woes) about this).
+In some contexts, the object (or hash) to be saved in the database needs to be filtered in order to exclude some of its properties. This can be for security reasons: the object has been automatically mapped from user input —by a [model binder](http://msdn.microsoft.com/en-us/library/system.web.mvc.imodelbinder.aspx) or a similar mechanism— and thus needs to be checked against the set of authorized properties. Not properly filtering user input is a security vulnerability; the github site was [hacked](http://www.theregister.co.uk/2012/03/05/github_hack/) due to a similar issue (if you want to read [more](http://www.diaryofaninja.com/blog/2012/03/11/what-aspnet-mvc-developers-can-learn-from-githubrsquos-security-woes) about this).
 
 MonkeyOrm can slice the input object when calling `Save` or `Update` by applying either a black list or a white list filter on object properties.
 
 ```csharp
 connection.Save("Users", user, blacklist: new[] { "IsAdmin" });
 ```
-This will prevent a hacker form forging a user input that would force `IsAdmin` column to `true`.
+This will prevent a hacker form forging user input that would force `IsAdmin` column to `true`.
 
 ```csharp
 connection.Update("Users", user, "Id=@id", new { id }, whitelist: new[] { "Name", "Age" });
@@ -163,13 +163,13 @@ connection.Update("Users", user, "Id=@id", new { id }, whitelist: new[] { "Name"
 Only allows `Name` and `Age`to be updated, nothing else.
 
 # Interceptors and Blobbing
-Interceptors are functions you can set in order to take control on how the data is processed by MonkeyOrm. One interesting interceptor is the `UnknownValueType` interceptor. It is called when the data to be inserted in a given column does not map directly to a database native type. Consider the following example:
+Interceptors are functions you can set in order to control how data is processed by MonkeyOrm. One interesting interceptor is the `UnknownValueType` interceptor. It is called when the data to be inserted in a database column does not map directly to a database native type. Consider the following example:
 ```csharp
 connection.Save("Users", new { Name="Joe", Age=67, Profile=new ProfileData { /* ... */ });
 ```
 The property `Profile` holds an instance of POCO type `ProfileData`. This type can't be directly inserted into the column `Profile` of the `Users` table as it is.
 
-In this situation, MonkeyOrm calls the `UnknownValueType` callback in order the give clint code a chance to "intercept" the non-trivial type and transform it to something the database can handle. A typical example would be to blob (serialize) the `ProfileData` instance. Here is an example of a xml blobber interceptor:
+In this situation, MonkeyOrm calls the `UnknownValueType` callback in order the give client code a chance to "intercept" the non-trivial type and transform it to something the database can handle. A typical example would be to blob (serialize) the `ProfileData` instance. Here is an example of a xml blobber interceptor:
 ```csharp
 MonkeyOrm.Settings.Interceptors.UnknownValueType = o =>
 {
