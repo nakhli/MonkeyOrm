@@ -76,7 +76,7 @@ Console.WriteLine("Max {0} - Min {1}", stats.Max, stats.Min);
 
 ## Read'em All
 ```csharp
-List<dynamic> users = connection.ReadAll("Select * From Users Where Age > @age", new { age = 30 });
+var users = connection.ReadAll("Select * From Users Where Age > @age", new { age = 30 });
 ```
 
 Bulk fetches the whole result set in memory as a list.
