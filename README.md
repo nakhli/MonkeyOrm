@@ -39,27 +39,6 @@ MonkeyOrm Api consists mainly of extension methods, just like the <code>Save</co
 Several types are extended: `connection` can be an [<code>IDbConnection</code>](http://msdn.microsoft.com/en-us/library/system.data.idbconnection.aspx), an [<code>IDbTransaction</code>](http://msdn.microsoft.com/en-us/library/system.data.idbtransaction.aspx), 
 any function in your code returning a new connection [`Func<IDbConnection>`](http://msdn.microsoft.com/en-us/library/bb534960.aspx), or the MonkeyOrm defined interface [<code>IConnectionFactory</code>](https://github.com/Sinbadsoft/MonkeyOrm/blob/master/MonkeyOrm/IConnectionFactory.cs).
 
-
-
-# Read just one item
-
-```csharp
-var joe = connection.ReadOne("Select * From Users Where Name = @name", new { name = "Joe" });
-```
-Reads only the first element, if any, from the result set. You can also read computed data:
-
-```csharp
-var stats = connection.ReadOne("Select Max(Age) As Max, Min(Age) As Min From Users");
-Console.WriteLine("Max {0} - Min {1}", stats.Max, stats.Min);
-```
-
-# Read'em All
-```csharp
-var users = connection.ReadAll("Select * From Users Where Age > @age", new { age = 30 });
-```
-
-Bulk fetches the whole result set in memory as a list.
-
 # Update
 
 ```csharp
@@ -77,7 +56,32 @@ Aka Upsert. Attempts to save first. If the insertion violates a key or unicity c
 connection.Delete("Users", "Name=@name", new { name = "Sauron" });
 ```
 
-# Stream Read
+# Read
+
+By default, [<code>ExpandoObject</code>](http://msdn.microsoft.com/en-us/library/System.Dynamic.ExpandoObject.aspx)s are used to [map](http://en.wikipedia.org/wiki/Data_access_object) the data read from the database and are returned as `dynamic` to client code.
+
+If strongly typed objects are preferred to `dynamic`, MonkeyOrm can do the mapping for you to any provided user type. To do that, all the `Read` methods list here have `Read<T>` overloads.
+
+## Read just one item
+
+```csharp
+var joe = connection.ReadOne("Select * From Users Where Name = @name", new { name = "Joe" });
+```
+Reads only the first element, if any, from the result set. You can also read computed data:
+
+```csharp
+var stats = connection.ReadOne("Select Max(Age) As Max, Min(Age) As Min From Users");
+Console.WriteLine("Max {0} - Min {1}", stats.Max, stats.Min);
+```
+
+## Read'em All
+```csharp
+List<dynamic> users = connection.ReadAll("Select * From Users Where Age > @age", new { age = 30 });
+```
+
+Bulk fetches the whole result set in memory as a list.
+
+## Stream Read
 Instead of bulk fetching query results in memory, they are wrapped in an enumerable for lazy evaluation. Items are loaded from the databse when the returned `IEnumerable` is actually enumerated, one at a time.
 
 Here is an example where results are streamed from the database to a file on disk:
