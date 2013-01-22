@@ -60,7 +60,7 @@ connection.Delete("Users", "Name=@name", new { name = "Sauron" });
 
 By default, [<code>ExpandoObject</code>](http://msdn.microsoft.com/en-us/library/System.Dynamic.ExpandoObject.aspx)s are used to [map](http://en.wikipedia.org/wiki/Data_access_object) the data read from the database and are returned as `dynamic` to client code.
 
-If strongly typed objects are preferred to `dynamic`, MonkeyOrm can do the mapping for you to any provided user type. To do that, all the `Read` methods list here have `Read<T>` overloads.
+If strongly typed objects are preferred to `dynamic`, MonkeyOrm can do the mapping for you to any provided user type. To do that, all the `Read` methods listed here have `Read<T>` overloads.
 
 ## Read just one item
 
