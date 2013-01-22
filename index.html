@@ -94,28 +94,8 @@
 <a name="what-the-heck-is-connection" class="anchor" href="#what-the-heck-is-connection"><span class="mini-icon mini-icon-link"></span></a>What the heck is <code>connection</code>?</h5>
 
 <p>MonkeyOrm Api consists mainly of extension methods, just like the <code>Save</code> method in the snippets above.
-In order to make things easier for client code, several types are extended with the same methods. Actually, <code>connection</code> can be an <a href="http://msdn.microsoft.com/en-us/library/system.data.idbconnection.aspx"><code>IDbConnection</code></a>, an <a href="http://msdn.microsoft.com/en-us/library/system.data.idbtransaction.aspx"><code>IDbTransaction</code></a>, 
-any connection factory function <a href="http://msdn.microsoft.com/en-us/library/bb534960.aspx"><code>Func&lt;IDbConnection&gt;</code></a>, or the MonkeyOrm defined interface <a href="https://github.com/Sinbadsoft/MonkeyOrm/blob/master/MonkeyOrm/IConnectionFactory.cs"><code>IConnectionFactory</code></a>.</p>
-
-<h1>
-<a name="read-just-one-item" class="anchor" href="#read-just-one-item"><span class="mini-icon mini-icon-link"></span></a>Read just one item</h1>
-
-<div class="highlight"><pre><span class="kt">var</span> <span class="n">joe</span> <span class="p">=</span> <span class="n">connection</span><span class="p">.</span><span class="n">ReadOne</span><span class="p">(</span><span class="s">"Select * From Users Where Name = @name"</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">name</span> <span class="p">=</span> <span class="s">"Joe"</span> <span class="p">});</span>
-</pre></div>
-
-<p>Reads only the first element, if any, from the result set. You can also read computed data:</p>
-
-<div class="highlight"><pre><span class="kt">var</span> <span class="n">stats</span> <span class="p">=</span> <span class="n">connection</span><span class="p">.</span><span class="n">ReadOne</span><span class="p">(</span><span class="s">"Select Max(Age) As Max, Min(Age) As Min From Users"</span><span class="p">);</span>
-<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"Max {0} - Min {1}"</span><span class="p">,</span> <span class="n">stats</span><span class="p">.</span><span class="n">Max</span><span class="p">,</span> <span class="n">stats</span><span class="p">.</span><span class="n">Min</span><span class="p">);</span>
-</pre></div>
-
-<h1>
-<a name="readem-all" class="anchor" href="#readem-all"><span class="mini-icon mini-icon-link"></span></a>Read'em All</h1>
-
-<div class="highlight"><pre><span class="kt">var</span> <span class="n">users</span> <span class="p">=</span> <span class="n">connection</span><span class="p">.</span><span class="n">ReadAll</span><span class="p">(</span><span class="s">"Select * From Users Where Age &gt; @age"</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">age</span> <span class="p">=</span> <span class="m">30</span> <span class="p">});</span>
-</pre></div>
-
-<p>Bulk fetches the whole result set in memory as a list.</p>
+Several types are extended: <code>connection</code> can be an <a href="http://msdn.microsoft.com/en-us/library/system.data.idbconnection.aspx"><code>IDbConnection</code></a>, an <a href="http://msdn.microsoft.com/en-us/library/system.data.idbtransaction.aspx"><code>IDbTransaction</code></a>, 
+any function in your code returning a new connection <a href="http://msdn.microsoft.com/en-us/library/bb534960.aspx"><code>Func&lt;IDbConnection&gt;</code></a>, or the MonkeyOrm defined interface <a href="https://github.com/Sinbadsoft/MonkeyOrm/blob/master/MonkeyOrm/IConnectionFactory.cs"><code>IConnectionFactory</code></a>.</p>
 
 <h1>
 <a name="update" class="anchor" href="#update"><span class="mini-icon mini-icon-link"></span></a>Update</h1>
@@ -138,27 +118,54 @@ any connection factory function <a href="http://msdn.microsoft.com/en-us/library
 </pre></div>
 
 <h1>
-<a name="stream-read" class="anchor" href="#stream-read"><span class="mini-icon mini-icon-link"></span></a>Stream Read</h1>
+<a name="read" class="anchor" href="#read"><span class="mini-icon mini-icon-link"></span></a>Read</h1>
 
-<p>Instead of bulk fetching query results in memory, they are wrapped in an enumerable for lazy evaluation. Items are loaded from the databse when the result is actually enumerated, one at a time.</p>
+<p>By default, <a href="http://msdn.microsoft.com/en-us/library/System.Dynamic.ExpandoObject.aspx"><code>ExpandoObject</code></a>s are used to <a href="http://en.wikipedia.org/wiki/Data_access_object">map</a> the data read from the database and are returned as <code>dynamic</code> to client code.</p>
+
+<p>If strongly typed objects are preferred to <code>dynamic</code>, MonkeyOrm can do the mapping for you to any provided user type. To do that, all the <code>Read</code> methods listed here have <code>Read&lt;T&gt;</code> overloads.</p>
+
+<h2>
+<a name="read-just-one-item" class="anchor" href="#read-just-one-item"><span class="mini-icon mini-icon-link"></span></a>Read just one item</h2>
+
+<div class="highlight"><pre><span class="kt">var</span> <span class="n">joe</span> <span class="p">=</span> <span class="n">connection</span><span class="p">.</span><span class="n">ReadOne</span><span class="p">(</span><span class="s">"Select * From Users Where Name = @name"</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">name</span> <span class="p">=</span> <span class="s">"Joe"</span> <span class="p">});</span>
+</pre></div>
+
+<p>Reads only the first element, if any, from the result set. You can also read computed data:</p>
+
+<div class="highlight"><pre><span class="kt">var</span> <span class="n">stats</span> <span class="p">=</span> <span class="n">connection</span><span class="p">.</span><span class="n">ReadOne</span><span class="p">(</span><span class="s">"Select Max(Age) As Max, Min(Age) As Min From Users"</span><span class="p">);</span>
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"Max {0} - Min {1}"</span><span class="p">,</span> <span class="n">stats</span><span class="p">.</span><span class="n">Max</span><span class="p">,</span> <span class="n">stats</span><span class="p">.</span><span class="n">Min</span><span class="p">);</span>
+</pre></div>
+
+<h2>
+<a name="readem-all" class="anchor" href="#readem-all"><span class="mini-icon mini-icon-link"></span></a>Read'em All</h2>
+
+<div class="highlight"><pre><span class="kt">var</span> <span class="n">users</span> <span class="p">=</span> <span class="n">connection</span><span class="p">.</span><span class="n">ReadAll</span><span class="p">(</span><span class="s">"Select * From Users Where Age &gt; @age"</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">age</span> <span class="p">=</span> <span class="m">30</span> <span class="p">});</span>
+</pre></div>
+
+<p>Bulk fetches the whole result set in memory as a list.</p>
+
+<h2>
+<a name="stream-read" class="anchor" href="#stream-read"><span class="mini-icon mini-icon-link"></span></a>Stream Read</h2>
+
+<p>Instead of bulk fetching query results in memory, they are wrapped in an enumerable for lazy evaluation. Items are loaded from the databse when the returned <code>IEnumerable</code> is actually enumerated, one at a time.</p>
 
 <p>Here is an example where results are streamed from the database to a file on disk:</p>
 
 <div class="highlight"><pre><span class="kt">var</span> <span class="n">users</span> <span class="p">=</span> <span class="n">connection</span><span class="p">.</span><span class="n">ReadStream</span><span class="p">(</span><span class="s">"Select * From Users"</span><span class="p">);</span>
 
-<span class="n">using</span><span class="p">(</span><span class="kt">var</span> <span class="n">file</span> <span class="p">=</span> <span class="k">new</span> <span class="n">StreamWriter</span><span class="p">(</span><span class="n">Path</span><span class="p">.</span><span class="n">GetTempFileName</span><span class="p">()))</span>
+<span class="n">using</span><span class="p">(</span><span class="kt">var</span> <span class="n">file</span> <span class="p">=</span> <span class="k">new</span> <span class="n">StreamWriter</span><span class="p">(</span><span class="s">"result.txt"</span><span class="p">))</span>
 <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">user</span> <span class="k">in</span> <span class="n">users</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="n">file</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"{0} - {1}"</span><span class="p">,</span> <span class="n">user</span><span class="p">.</span><span class="n">Name</span><span class="p">,</span> <span class="n">user</span><span class="p">.</span><span class="n">Age</span><span class="p">);</span>
 <span class="p">}</span>
 </pre></div>
 
-<p>Two Bonus Points: (1) the result enumerable can be enumerated multiple times if data needs to be re-streamed from the database (the query will be executed again), (2) Linq queries can be used on the result as for any enumerable.</p>
+<p>Two Bonus Points: (1) the result enumerable can be enumerated multiple times if data needs to be re-streamed from the database (the query will be executed again), (2) Linq queries can be used on the result as for any enumerable, no restrictions.</p>
 
-<p><code>ReadStream</code> has also an overload that, instead of returning the result as enumerable, it takes a function that it calls for each result item until it returns <code>false</code>. The snippet above would be equivalent to:</p>
+<p><code>ReadStream</code> has also an overload that —instead of returning the result as an enumerable— takes a function that it calls for each result item until it returns <code>false</code>. The snippet above would be equivalent to:</p>
 
-<div class="highlight"><pre><span class="n">using</span><span class="p">(</span><span class="kt">var</span> <span class="n">file</span> <span class="p">=</span> <span class="k">new</span> <span class="n">StreamWriter</span><span class="p">(</span><span class="n">Path</span><span class="p">.</span><span class="n">GetTempFileName</span><span class="p">()))</span>
-<span class="n">connection</span><span class="p">.</span><span class="n">ReadStream</span><span class="p">(</span><span class="s">"Select * From Users"</span><span class="p">,</span> <span class="n">user</span> <span class="p">=&gt;</span> 
+<div class="highlight"><pre><span class="n">using</span><span class="p">(</span><span class="kt">var</span> <span class="n">file</span> <span class="p">=</span> <span class="k">new</span> <span class="n">StreamWriter</span><span class="p">(</span><span class="s">"result.txt"</span><span class="p">))</span>
+<span class="n">connection</span><span class="p">./span><span class="n">ReadStream</span><span class="p">(</span><span class="s">"Select * From Users"</span><span class="p">,</span> <span class="n">user</span> <span class="p">=&gt;</span> 
 <span class="p">{</span>
     <span class="n">file</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"{0} - {1}"</span><span class="p">,</span> <span class="n">user</span><span class="p">.</span><span class="n">Name</span><span class="p">,</span> <span class="n">user</span><span class="p">.</span><span class="n">Age</span><span class="p">);</span>
     <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
@@ -177,7 +184,7 @@ any connection factory function <a href="http://msdn.microsoft.com/en-us/library
 <span class="p">});</span>
 </pre></div>
 
-<p>The transaction block can be a function or an action. The return value, if any, will be returned back to client code. The transaction can be manually committed at any point by invoking <code>t.Commit()</code>. Setting <code>autocommit</code> parameter to <code>true</code> will simply insert a call to <code>Commit()</code> after the transaction block.</p>
+<p>The transaction block can be a function or an action. The return value, if any, is returned back to client code. The transaction can be manually committed at any point by invoking <code>t.Commit()</code>. Setting the <code>autocommit</code> parameter to <code>true</code> will insert a call to <code>Commit()</code> after the transaction block.</p>
 
 <p>The transaction <a href="http://msdn.microsoft.com/en-us/library/system.data.isolationlevel.aspx">isolation level</a> can be specified using the <code>isolation</code> parameter:</p>
 
@@ -191,7 +198,7 @@ any connection factory function <a href="http://msdn.microsoft.com/en-us/library
 <h1>
 <a name="batch-insertion" class="anchor" href="#batch-insertion"><span class="mini-icon mini-icon-link"></span></a>Batch insertion</h1>
 
-<p>Batch insertion enables insertion of enumerable data sets; whether this data set is held in memory or streamed from any other source (file, database, network etc.).</p>
+<p>Batch insertion enables insertion of enumerable data sets; whether this data set is held in memory or streamed from any other source (file, database, network, computed on the fly etc.).</p>
 
 <div class="highlight"><pre><span class="n">connection</span><span class="p">.</span><span class="n">SaveBatch</span><span class="p">(</span><span class="s">"Users"</span><span class="p">,</span> <span class="k">new</span><span class="p">[]</span>
     <span class="p">{</span>
@@ -201,9 +208,9 @@ any connection factory function <a href="http://msdn.microsoft.com/en-us/library
     <span class="p">});</span>
 </pre></div>
 
-<p>By default, one object at a time is read from the provided set and inserted in the database. In order to tune performance/bandwidth more elements can be loaded and inserted at once through the <code>chunkSize</code> parameter.</p>
+<p>By default, one object at a time is read from the provided enumerable and inserted in the database. In order to tune memory usage vs network round-trips more elements can be loaded and inserted at once. This is controlled by the <code>chunkSize</code> parameter.</p>
 
-<p>In the following snippet, 100 objects are loaded and inserted at a time &mdash;in the same query&mdash; from the provided enumerable to the database.</p>
+<p>In the following snippet, 100 objects are loaded and inserted at once —in the same query— from the provided enumerable to the database.</p>
 
 <div class="highlight"><pre><span class="n">connection</span><span class="p">.</span><span class="n">SaveBatch</span><span class="p">(</span><span class="s">"Users"</span><span class="p">,</span> <span class="n">LoadDataFromRemoteSource</span><span class="p">(),</span> <span class="m">100</span><span class="p">);</span>
 </pre></div>
@@ -216,14 +223,14 @@ any connection factory function <a href="http://msdn.microsoft.com/en-us/library
 <h1>
 <a name="object-slicing" class="anchor" href="#object-slicing"><span class="mini-icon mini-icon-link"></span></a>Object Slicing</h1>
 
-<p>In some contexts, the object (or hash) to be saved in the database needs to be filtered in order to exclude some of its properties. This can be for security reasons: the object was automatically mapped from user input &mdash;by a <a href="http://msdn.microsoft.com/en-us/library/system.web.mvc.imodelbinder.aspx">model binder</a> or a similar mechanism&mdash; and thus needs to be checked against the set of authorized properties. Not properly filtering user input is a security vulnerability; the github site was <a href="http://www.theregister.co.uk/2012/03/05/github_hack/">hacked</a> due to a similar issue (if you want to read <a href="http://www.diaryofaninja.com/blog/2012/03/11/what-aspnet-mvc-developers-can-learn-from-githubrsquos-security-woes">more</a> about this).</p>
+<p>In some contexts, the object (or hash) to be saved in the database needs to be filtered in order to exclude some of its properties. This can be for security reasons: the object has been automatically mapped from user input —by a <a href="http://msdn.microsoft.com/en-us/library/system.web.mvc.imodelbinder.aspx">model binder</a> or a similar mechanism— and thus needs to be checked against the set of authorized properties. Not properly filtering user input is a security vulnerability; the github site was <a href="http://www.theregister.co.uk/2012/03/05/github_hack/">hacked</a> due to a similar issue (if you want to read <a href="http://www.diaryofaninja.com/blog/2012/03/11/what-aspnet-mvc-developers-can-learn-from-githubrsquos-security-woes">more</a> about this).</p>
 
 <p>MonkeyOrm can slice the input object when calling <code>Save</code> or <code>Update</code> by applying either a black list or a white list filter on object properties.</p>
 
 <div class="highlight"><pre><span class="n">connection</span><span class="p">.</span><span class="n">Save</span><span class="p">(</span><span class="s">"Users"</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">blacklist</span><span class="p">:</span> <span class="k">new</span><span class="p">[]</span> <span class="p">{</span> <span class="s">"IsAdmin"</span> <span class="p">});</span>
 </pre></div>
 
-<p>This will prevent a hacker form forging a user input that would force <code>IsAdmin</code> column to <code>true</code>.</p>
+<p>This will prevent a hacker form forging user input that would force <code>IsAdmin</code> column to <code>true</code>.</p>
 
 <div class="highlight"><pre><span class="n">connection</span><span class="p">.</span><span class="n">Update</span><span class="p">(</span><span class="s">"Users"</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="s">"Id=@id"</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">id</span> <span class="p">},</span> <span class="n">whitelist</span><span class="p">:</span> <span class="k">new</span><span class="p">[]</span> <span class="p">{</span> <span class="s">"Name"</span><span class="p">,</span> <span class="s">"Age"</span> <span class="p">});</span>
 </pre></div>
@@ -233,14 +240,14 @@ any connection factory function <a href="http://msdn.microsoft.com/en-us/library
 <h1>
 <a name="interceptors-and-blobbing" class="anchor" href="#interceptors-and-blobbing"><span class="mini-icon mini-icon-link"></span></a>Interceptors and Blobbing</h1>
 
-<p>Interceptors are functions you can set in order to take control on how the data is processed by MonkeyOrm. One interesting interceptor is the <code>UnknownValueType</code> interceptor. It is called when the data to be inserted in a given column does not map directly to a database native type. Consider the following example:</p>
+<p>Interceptors are functions you can set in order to control how data is processed by MonkeyOrm. One interesting interceptor is the <code>UnknownValueType</code> interceptor. It is called when the data to be inserted in a database column does not map directly to a database native type. Consider the following example:</p>
 
 <div class="highlight"><pre><span class="n">connection</span><span class="p">.</span><span class="n">Save</span><span class="p">(</span><span class="s">"Users"</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">Name</span><span class="p">=</span><span class="s">"Joe"</span><span class="p">,</span> <span class="n">Age</span><span class="p">=</span><span class="m">67</span><span class="p">,</span> <span class="n">Profile</span><span class="p">=</span><span class="k">new</span> <span class="n">ProfileData</span> <span class="p">{</span> <span class="cm">/* ... */</span> <span class="p">});</span>
 </pre></div>
 
 <p>The property <code>Profile</code> holds an instance of POCO type <code>ProfileData</code>. This type can't be directly inserted into the column <code>Profile</code> of the <code>Users</code> table as it is.</p>
 
-<p>In this situation, MonkeyOrm calls the <code>UnknownValueType</code> callback in order the give clint code a chance to "intercept" the non-trivial type and transform it to something the database can handle. A typical example would be to blob (serialize) the <code>ProfileData</code> instance. Here is an example of a xml blobber interceptor:</p>
+<p>In this situation, MonkeyOrm calls the <code>UnknownValueType</code> callback in order the give client code a chance to "intercept" the non-trivial type and transform it to something the database can handle. A typical example would be to blob (serialize) the <code>ProfileData</code> instance. Here is an example of a xml blobber interceptor:</p>
 
 <div class="highlight"><pre><span class="n">MonkeyOrm</span><span class="p">.</span><span class="n">Settings</span><span class="p">.</span><span class="n">Interceptors</span><span class="p">.</span><span class="n">UnknownValueType</span> <span class="p">=</span> <span class="n">o</span> <span class="p">=&gt;</span>
 <span class="p">{</span>
