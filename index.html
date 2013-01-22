@@ -162,7 +162,7 @@ any function in your code returning a new connection <a href="http://msdn.micros
 
 <p>Two Bonus Points: (1) the result enumerable can be enumerated multiple times if data needs to be re-streamed from the database (the query will be executed again), (2) Linq queries can be used on the result as for any enumerable, no restrictions.</p>
 
-<p><code>ReadStream</code> has also an overload that —instead of returning the result as an enumerable— takes a function that it calls for each result item until it returns <code>false</code>. The snippet above would be equivalent to:</p>
+<p><code>ReadStream</code> has also an overload that &mdash;instead of returning the result as an enumerable&mdash; takes a function that it calls for each result item until it returns <code>false</code>. The snippet above would be equivalent to:</p>
 
 <div class="highlight"><pre><span class="n">using</span><span class="p">(</span><span class="kt">var</span> <span class="n">file</span> <span class="p">=</span> <span class="k">new</span> <span class="n">StreamWriter</span><span class="p">(</span><span class="s">"result.txt"</span><span class="p">))</span>
 <span class="n">connection</span><span class="p">./span><span class="n">ReadStream</span><span class="p">(</span><span class="s">"Select * From Users"</span><span class="p">,</span> <span class="n">user</span> <span class="p">=&gt;</span> 
@@ -210,7 +210,7 @@ any function in your code returning a new connection <a href="http://msdn.micros
 
 <p>By default, one object at a time is read from the provided enumerable and inserted in the database. In order to tune memory usage vs network round-trips more elements can be loaded and inserted at once. This is controlled by the <code>chunkSize</code> parameter.</p>
 
-<p>In the following snippet, 100 objects are loaded and inserted at once —in the same query— from the provided enumerable to the database.</p>
+<p>In the following snippet, 100 objects are loaded and inserted at once &mdash;in the same query&mdash; from the provided enumerable to the database.</p>
 
 <div class="highlight"><pre><span class="n">connection</span><span class="p">.</span><span class="n">SaveBatch</span><span class="p">(</span><span class="s">"Users"</span><span class="p">,</span> <span class="n">LoadDataFromRemoteSource</span><span class="p">(),</span> <span class="m">100</span><span class="p">);</span>
 </pre></div>
@@ -223,7 +223,7 @@ any function in your code returning a new connection <a href="http://msdn.micros
 <h1>
 <a name="object-slicing" class="anchor" href="#object-slicing"><span class="mini-icon mini-icon-link"></span></a>Object Slicing</h1>
 
-<p>In some contexts, the object (or hash) to be saved in the database needs to be filtered in order to exclude some of its properties. This can be for security reasons: the object has been automatically mapped from user input —by a <a href="http://msdn.microsoft.com/en-us/library/system.web.mvc.imodelbinder.aspx">model binder</a> or a similar mechanism— and thus needs to be checked against the set of authorized properties. Not properly filtering user input is a security vulnerability; the github site was <a href="http://www.theregister.co.uk/2012/03/05/github_hack/">hacked</a> due to a similar issue (if you want to read <a href="http://www.diaryofaninja.com/blog/2012/03/11/what-aspnet-mvc-developers-can-learn-from-githubrsquos-security-woes">more</a> about this).</p>
+<p>In some contexts, the object (or hash) to be saved in the database needs to be filtered in order to exclude some of its properties. This can be for security reasons: the object has been automatically mapped from user input &mdash;by a <a href="http://msdn.microsoft.com/en-us/library/system.web.mvc.imodelbinder.aspx">model binder</a> or a similar mechanism&mdash; and thus needs to be checked against the set of authorized properties. Not properly filtering user input is a security vulnerability; the github site was <a href="http://www.theregister.co.uk/2012/03/05/github_hack/">hacked</a> due to a similar issue (if you want to read <a href="http://www.diaryofaninja.com/blog/2012/03/11/what-aspnet-mvc-developers-can-learn-from-githubrsquos-security-woes">more</a> about this).</p>
 
 <p>MonkeyOrm can slice the input object when calling <code>Save</code> or <code>Update</code> by applying either a black list or a white list filter on object properties.</p>
 
