@@ -121,7 +121,7 @@ namespace MonkeyOrm
             }
         }
 
-        public static int SaveOrUpdate(this IConnectionFactory connectionFactory, string table, object values, IEnumerable<string> properties = null, IEnumerable<string> whitelist = null, IEnumerable<string> blacklist = null)
+        public static int SaveOrUpdate(this IConnectionFactory connectionFactory, string table, object values, IEnumerable<string> whitelist = null, IEnumerable<string> blacklist = null)
         {
             using (var connection = connectionFactory.Create())
             {
