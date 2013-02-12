@@ -18,7 +18,7 @@
       <dependency id="Sinbadsoft.Lib.Model" />
     </dependencies>
     <releaseNotes>
-      * Removed unused parameter on SaveOrUpdate extension method for IConnectionFactory.
+      * Updated nuget dependencies.
     </releaseNotes>
   </metadata>
 </package>
