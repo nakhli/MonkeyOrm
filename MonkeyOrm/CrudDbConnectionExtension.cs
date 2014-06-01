@@ -104,7 +104,7 @@ namespace MonkeyOrm
             using (var command = connection.CreateInsertCommand(table, values, whitelist, blacklist, transaction))
             {
                 int affectedRows = command.ExecuteNonQuery();
-                id = connection.LastInsertedId();
+                id = (long)connection.LastInsertedId();
                 return affectedRows;
             }
         }
@@ -224,11 +224,11 @@ namespace MonkeyOrm
             }
         }
 
-        internal static long LastInsertedId(this IDbConnection connection, IDbTransaction transaction = null)
+        internal static ulong LastInsertedId(this IDbConnection connection, IDbTransaction transaction = null)
         {
             using (var command = connection.CreateCommand("SELECT LAST_INSERT_ID()", transaction: transaction))
             {
-                return (long)command.ExecuteScalar();
+                return Convert.ToUInt64(command.ExecuteScalar());
             }
         }
     }
